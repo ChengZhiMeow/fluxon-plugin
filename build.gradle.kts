@@ -20,6 +20,7 @@ taboolib {
         install(Bukkit)
         install(Velocity)
         install(BungeeCord)
+        // repoTabooLib = project.repositories.mavenLocal().url.toString()
     }
     description {
         name = "FluxonPlugin"
@@ -27,7 +28,7 @@ taboolib {
             name("sky")
         }
     }
-    version { taboolib = "6.2.4-5902762" }
+    version { taboolib = "6.2.4-ddf2cc9" }
 }
 
 repositories {
@@ -35,9 +36,7 @@ repositories {
 }
 
 dependencies {
-    taboo("org.tabooproject.fluxon:core:1.4.3")
-    // compileOnly("ink.ptms.core:v12004:12004:mapped")
-    // compileOnly("ink.ptms.core:v12004:12004:universal")
+    taboo("org.tabooproject.fluxon:core:1.4.4")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
 }

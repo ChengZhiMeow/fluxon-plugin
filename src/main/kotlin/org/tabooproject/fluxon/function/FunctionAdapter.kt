@@ -3,12 +3,7 @@ package org.tabooproject.fluxon.function
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.function.adaptCommandSender
-import taboolib.common.platform.function.adaptLocation
-import taboolib.common.platform.function.adaptPlayer
-import taboolib.common.platform.function.allWorlds
-import taboolib.common.platform.function.console
-import taboolib.common.platform.function.onlinePlayers
+import taboolib.common.platform.function.*
 
 object FunctionAdapter {
 

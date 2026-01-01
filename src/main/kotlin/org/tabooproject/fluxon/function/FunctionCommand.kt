@@ -1,11 +1,11 @@
 package org.tabooproject.fluxon.function
 
-import org.tabooproject.fluxon.FluxonScript
 import org.tabooproject.fluxon.runtime.Environment
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import org.tabooproject.fluxon.runtime.Function
-import org.tabooproject.fluxon.runtime.FunctionContextPool
 import org.tabooproject.fluxon.runtime.java.Export
+import org.tabooproject.fluxon.util.getFluxonScript
+import org.tabooproject.fluxon.util.invokeInline
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.ProxyCommandSender
@@ -89,7 +89,7 @@ object FunctionCommand {
 
         @Export
         fun register() {
-            val script = env.rootVariables["__script__"] as? FluxonScript
+            val script = env.getFluxonScript()
             if (script == null) {
                 warning("无法注册 $name 命令：没有找到脚本环境。")
                 return
@@ -108,33 +108,15 @@ object FunctionCommand {
                 ),
                 executor = object : CommandExecutor {
                     override fun execute(sender: ProxyCommandSender, command: CommandStructure, name: String, args: Array<String>): Boolean {
-                        if (executor != null) {
-                            val pool = FunctionContextPool.local()
-                            val borrowed = pool.borrow(executor!!, null, arrayOf(args), env)
-                            try {
-                                executor!!.call(borrowed)
-                            } finally {
-                                pool.release(borrowed)
-                            }
-                            return true
-                        }
-                        return false
+                        executor?.invokeInline(env, 2, args, sender, null, null, sender)
+                        return true
                     }
                 },
                 completer = object : CommandCompleter {
                     override fun execute(sender: ProxyCommandSender, command: CommandStructure, name: String, args: Array<String>): List<String>? {
-                        if (completer != null) {
-                            val pool = FunctionContextPool.local()
-                            val borrowed = pool.borrow(completer!!, null, arrayOf(args), env)
-                            try {
-                                val result = completer!!.call(borrowed)
-                                if (result is List<*>) {
-                                    return result.filterIsInstance<String>()
-                                }
-                            } finally {
-                                pool.release(borrowed)
-                            }
-                            return null
+                        val result = completer?.invokeInline(env, 2, args, sender, null, null, sender)
+                        if (result is List<*>) {
+                            return result.filterIsInstance<String>()
                         }
                         return null
                     }

@@ -45,17 +45,17 @@ class FluxonScript(
     
     /**
      * 执行脚本
+     * 如果克隆则自动释放（否则会残留）
      *
      * @param vars 脚本变量
      * @return 执行结果
      */
     fun invoke(vars: Map<String, Any?> = emptyMap()): Any? {
-        val clonedScript = instance.clone()
         val environment = FluxonRuntime.getInstance().newEnvironment()
         environment.defineRootVariable("__script__", this)
         vars.forEach { (key, value) -> environment.defineRootVariable(key, value) }
         return try {
-            clonedScript.eval(environment)?.exceptFluxonCompletableFutureError()
+            instance.eval(environment)?.exceptFluxonCompletableFutureError()
         } catch (ex: FluxonRuntimeError) {
             ex.printError()
             null
@@ -111,9 +111,9 @@ class FluxonScript(
                     ex.printError()
                 }
             }
-            // 释放所有注册的资源
-            releaseAllResources()
         }
+        // 释放所有注册的资源
+        releaseAllResources()
         // 如果没有 env 表示脚本未执行，不存在可释放资源
     }
 

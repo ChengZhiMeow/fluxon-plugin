@@ -5,6 +5,7 @@ import io.izzel.taboolib.gradle.CommandHelper
 import io.izzel.taboolib.gradle.Bukkit
 import io.izzel.taboolib.gradle.Velocity
 import io.izzel.taboolib.gradle.BungeeCord
+import io.izzel.taboolib.gradle.MinecraftChat
 
 
 plugins {
@@ -17,6 +18,7 @@ taboolib {
     env {
         install(Basic)
         install(CommandHelper)
+        install(MinecraftChat)
         install(Bukkit)
         install(Velocity)
         install(BungeeCord)

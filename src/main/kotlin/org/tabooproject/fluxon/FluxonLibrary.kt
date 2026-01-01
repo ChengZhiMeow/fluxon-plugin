@@ -9,6 +9,7 @@ import org.tabooproject.fluxon.runtime.error.FluxonRuntimeError
 import org.tabooproject.fluxon.runtime.library.LibraryLoader
 import org.tabooproject.fluxon.util.exceptFluxonCompletableFutureError
 import org.tabooproject.fluxon.util.printError
+import org.tabooproject.fluxon.util.toScriptId
 import org.tabooproject.fluxon.util.with
 import taboolib.common.LifeCycle
 import taboolib.common.io.deepDelete
@@ -34,6 +35,7 @@ object FluxonLibrary {
 
     /**
      * 执行脚本库中的脚本
+     * 自动释放
      *
      * @param name 脚本名称
      * @param vars 脚本变量
@@ -47,7 +49,7 @@ object FluxonLibrary {
         val environment = FluxonRuntime.getInstance().newEnvironment()
         vars.forEach { (k, v) -> environment.defineRootVariable(k, v) }
         return try {
-            script.invoke(vars)?.exceptFluxonCompletableFutureError()
+            script.invoke(vars = vars)?.exceptFluxonCompletableFutureError()
         } catch (ex: FluxonRuntimeError) {
             ex.printError()
             null
@@ -65,6 +67,7 @@ object FluxonLibrary {
                 }
             }
             // 加载自定义脚本文件
+            getDataFolder().resolve("classes").deepDelete()
             scripts += compileFolder(getDataFolder().resolve("scripts"))
         }
         scripts.forEach { it.value.init() }
@@ -82,7 +85,6 @@ object FluxonLibrary {
         // 用于编译的全局环境
         val environment = FluxonRuntime.getInstance().newEnvironment()
         // 遍历所有脚本文件
-        folder.resolve("classes").deepDelete()
         folder.walk().toList().parallelStream().forEach {
             val entry = compileFile(it, environment)
             if (entry != null) {
@@ -99,7 +101,7 @@ object FluxonLibrary {
                 val className = "${file.nameWithoutExtension}_${System.currentTimeMillis()}"
                 val result = Fluxon.compile(file.readText(), className, environment, FluxonLibrary::class.java.classLoader)
                 val instance = result.createInstance(classLoader) as RuntimeScriptBase
-                val id = file.path.substringAfter(getDataFolder().path).substringBeforeLast('.').replace("[/\\\\]".toRegex(), "_").drop(1)
+                val id = file.toScriptId()
                 // 输出 class 文件
                 newFile(getDataFolder().resolve("classes/$id/${result.className}.class")).writeBytes(result.mainClass)
                 result.innerClasses.forEachIndexed { index, bytes ->
@@ -113,5 +115,36 @@ object FluxonLibrary {
             }
         }
         return null
+    }
+
+    /**
+     * 加载单个脚本文件
+     *
+     * @param file 脚本文件
+     * @param environment 运行环境
+     * @return 加载结果
+     */
+    fun loadScriptFile(file: File, environment: Environment): LoadResult {
+        val scriptId = file.toScriptId()
+        // 检查是否已加载
+        if (scripts.containsKey(scriptId)) {
+            return LoadResult.ALREADY_LOADED
+        }
+        // 编译脚本
+        val compiled = compileFile(file, environment) ?: return LoadResult.COMPILE_FAILED
+        // 加载并初始化
+        val (id, script) = compiled
+        scripts[id] = script
+        script.init()
+        return LoadResult.SUCCESS
+    }
+
+    /**
+     * 加载脚本结果
+     */
+    enum class LoadResult {
+        SUCCESS,        // 加载成功
+        ALREADY_LOADED, // 已加载
+        COMPILE_FAILED  // 编译失败
     }
 }

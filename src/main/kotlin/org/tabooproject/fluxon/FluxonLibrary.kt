@@ -5,7 +5,10 @@ import org.tabooproject.fluxon.parser.error.ParseException
 import org.tabooproject.fluxon.runtime.Environment
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import org.tabooproject.fluxon.runtime.RuntimeScriptBase
+import org.tabooproject.fluxon.runtime.error.FluxonRuntimeError
 import org.tabooproject.fluxon.runtime.library.LibraryLoader
+import org.tabooproject.fluxon.util.exceptFluxonCompletableFutureError
+import org.tabooproject.fluxon.util.printError
 import org.tabooproject.fluxon.util.with
 import taboolib.common.LifeCycle
 import taboolib.common.io.deepDelete
@@ -22,10 +25,34 @@ object FluxonLibrary {
 
     // 脚本类加载器
     val classLoader = FluxonClassLoader(FluxonLibrary::class.java.classLoader)
+
     // 脚本库加载器
     val libraryLoader = LibraryLoader(FluxonRuntime.getInstance(), classLoader)
+
     // 脚本容器
     val scripts = ConcurrentHashMap<String, FluxonScript>()
+
+    /**
+     * 执行脚本库中的脚本
+     *
+     * @param name 脚本名称
+     * @param vars 脚本变量
+     */
+    fun invoke(name: String, vars: Map<String, Any?>): Any? {
+        val script = scripts[name]
+        if (script == null) {
+            warning("没有找到脚本 $name")
+            return null
+        }
+        val environment = FluxonRuntime.getInstance().newEnvironment()
+        vars.forEach { (k, v) -> environment.defineRootVariable(k, v) }
+        return try {
+            script.invoke(vars)?.exceptFluxonCompletableFutureError()
+        } catch (ex: FluxonRuntimeError) {
+            ex.printError()
+            null
+        }
+    }
 
     @Parallel("fluxon_library", runOn = LifeCycle.LOAD)
     fun reload() {
@@ -40,10 +67,11 @@ object FluxonLibrary {
             // 加载自定义脚本文件
             scripts += compileFolder(getDataFolder().resolve("scripts"))
         }
+        scripts.forEach { it.value.init() }
         info("已加载 ${libraryLoader.managedResults.size} 个系统库, ${scripts.size} 个脚本文件，耗时: $time")
     }
 
-    fun unload () {
+    fun unload() {
         scripts.forEach { it.value.unload() }
         scripts.clear()
         libraryLoader.unloadManagedResults()

@@ -5,15 +5,11 @@ import org.tabooproject.fluxon.tool.FunctionDumper
 import org.tabooproject.fluxon.util.exceptFluxonCompletableFutureError
 import org.tabooproject.fluxon.util.tell
 import taboolib.common.platform.ProxyCommandSender
-import taboolib.common.platform.command.CommandBody
-import taboolib.common.platform.command.CommandHeader
-import taboolib.common.platform.command.mainCommand
-import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.command.subCommandExec
+import taboolib.common.platform.command.*
 import taboolib.common.util.execution
+import taboolib.common5.Demand
 import taboolib.expansion.createHelper
-import kotlin.collections.component1
-import kotlin.collections.component2
+import kotlin.time.measureTime
 
 @CommandHeader("fluxon", aliases = ["fn"])
 object FluxonCommand {
@@ -21,6 +17,41 @@ object FluxonCommand {
     @CommandBody
     private val main = mainCommand {
         createHelper()
+    }
+
+    @Suppress("DuplicatedCode")
+    @CommandBody
+    private val run = subCommand {
+        dynamic("id") {
+            suggest { FluxonLibrary.scripts.keys().toList() }
+            dynamic("params") {
+                exec<ProxyCommandSender> {
+                    val params = Demand("0 ${ctx["params"]}".trim())
+                    val vars = hashMapOf<String, Any?>()
+                    params.tags.forEach { vars[it] = true }
+                    params.dataMap.forEach { vars[it.key] = it.value }
+                    val sender = sender
+                    vars["sender"] = sender
+                    val result: Any?
+                    val time = measureTime {
+                        result = FluxonLibrary.invoke(ctx["id"], vars)
+                    }
+                    sender.tell("执行结果: $result")
+                    sender.tell("耗时: $time")
+                }
+            }
+            exec<ProxyCommandSender> {
+                val vars = hashMapOf<String, Any?>()
+                val sender = sender
+                vars["sender"] = sender
+                val result: Any?
+                val time = measureTime {
+                    result = FluxonLibrary.invoke(ctx["id"], vars)
+                }
+                sender.tell("执行结果: $result")
+                sender.tell("耗时: $time")
+            }
+        }
     }
 
     @CommandBody
@@ -50,9 +81,23 @@ object FluxonCommand {
         FluxonLibrary.libraryLoader.managedResults.forEach { result ->
             sender.tell("- ${result.sourcePath}")
         }
-        sender.tell("已加载的 Fluxon 脚本文件:")
+        sender.tell("已加载的 Fluxon 脚本文件 (${FluxonLibrary.scripts.size}):")
         FluxonLibrary.scripts.forEach { (id, script) ->
-            sender.tell("- $id (${script.javaClass.simpleName})")
+            val timeDiff = System.currentTimeMillis() - script.timestamp
+            val timeStr = when {
+                timeDiff < 60000 -> "${timeDiff / 1000}秒前"
+                timeDiff < 3600000 -> "${timeDiff / 60000}分钟前"
+                else -> "${timeDiff / 3600000}小时前"
+            }
+            val statusInfo = buildList {
+                add("加载: $timeStr")
+                if (script.resources.isNotEmpty()) add("资源: ${script.resources.size}")
+                if (script.initialized != null) add("已初始化")
+            }.joinToString(", ")
+            sender.tell("- $id")
+            sender.tell("  类型: ${script.instance.javaClass.simpleName}")
+            sender.tell("  文件: ${script.scriptFile.path}")
+            sender.tell("  状态: $statusInfo")
         }
     }
 
@@ -85,8 +130,23 @@ object FluxonCommand {
     }
 
     @CommandBody
-    private val reload = subCommandExec<ProxyCommandSender> {
-        FluxonLibrary.reload()
-        sender.tell("重载完成。")
+    private val reload = subCommand {
+        dynamic("id", optional = true) {
+            suggest { FluxonLibrary.scripts.keys().toList() }
+            exec<ProxyCommandSender> {
+                val id = ctx["id"]
+                val script = FluxonLibrary.scripts[id]
+                if (script == null) {
+                    sender.tell("脚本 $id 不存在。")
+                } else {
+                    script.reload()
+                    sender.tell("脚本 $id 重载完成。")
+                }
+            }
+        }
+        exec<ProxyCommandSender> {
+            FluxonLibrary.reload()
+            sender.tell("重载完成。")
+        }
     }
 }

@@ -26,6 +26,22 @@ class FluxonScript(
     
     // 可释放的资源列表
     val resources = ConcurrentHashMap<String, AutoCloseable>()
+
+    // 初始化执行结果
+    var initialized: Any? = null
+
+    /**
+     * 初始化脚本
+     */
+    fun init(): Any? {
+        // 如果脚本不以 "_" 开头，则立刻执行
+        if (!scriptId.startsWith("_")) {
+            initialized = invoke()
+            return initialized
+        }
+        initialized = null
+        return null
+    }
     
     /**
      * 执行脚本
@@ -33,7 +49,7 @@ class FluxonScript(
      * @param vars 脚本变量
      * @return 执行结果
      */
-    fun invoke(vars: Map<String, Any> = emptyMap()): Any? {
+    fun invoke(vars: Map<String, Any?> = emptyMap()): Any? {
         val clonedScript = instance.clone()
         val environment = FluxonRuntime.getInstance().newEnvironment()
         environment.defineRootVariable("__script__", this)
@@ -66,11 +82,12 @@ class FluxonScript(
             // 更新实例
             this.instance = compiled.value.instance
             this.timestamp = System.currentTimeMillis()
+            // 初始化
+            init()
             // 更新库中的引用
             FluxonLibrary.scripts[scriptId] = compiled.value
             info("脚本 $scriptId 重载成功")
             true
-            
         } catch (ex: Exception) {
             warning("重载脚本 $scriptId 时发生异常: ${ex.message}")
             ex.printStackTrace()
@@ -83,17 +100,21 @@ class FluxonScript(
      * 会调用脚本的 release 函数并释放所有注册的资源
      */
     fun unload() {
-        // 调用脚本的 release 函数
-        val release = instance.environment.getFunctionOrNull("release")
-        if (release != null) {
-            try {
-                release.call(FunctionContext(release, null, emptyArray(), FluxonRuntime.getInstance().newEnvironment()))
-            } catch (ex: FluxonRuntimeError) {
-                ex.printError()
+        val environment = instance.environment
+        if (environment != null) {
+            // 调用脚本的 release 函数
+            val release = environment.getFunctionOrNull("release")
+            if (release != null) {
+                try {
+                    release.call(FunctionContext(release, null, emptyArray(), FluxonRuntime.getInstance().newEnvironment()))
+                } catch (ex: FluxonRuntimeError) {
+                    ex.printError()
+                }
             }
+            // 释放所有注册的资源
+            releaseAllResources()
         }
-        // 释放所有注册的资源
-        releaseAllResources()
+        // 如果没有 env 表示脚本未执行，不存在可释放资源
     }
 
     /**

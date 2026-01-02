@@ -1,5 +1,7 @@
 # FluxonPlugin
 
+Fluxon 脚本的运行环境插件，为在 Bukkit/BungeeCord/Velocity 服务器上运行 Fluxon 脚本提供完整的运行时支持。
+
 ## 构建发行版本
 
 发行版本用于正常使用, 不含 TabooLib 本体。

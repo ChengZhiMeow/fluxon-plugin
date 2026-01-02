@@ -11,6 +11,8 @@ import org.tabooproject.fluxon.platform.bukkit.function.Functions;
 import org.tabooproject.fluxon.platform.bukkit.function.PlayerOperators;
 import org.tabooproject.fluxon.runtime.Environment;
 import org.tabooproject.fluxon.runtime.FluxonRuntime;
+import taboolib.common.LifeCycle;
+import taboolib.common.platform.Awake;
 
 import java.util.Map;
 
@@ -23,10 +25,11 @@ import java.util.Map;
  */
 public class FluxonBukkit {
 
-    public static void init(final FluxonRuntime runtime) {
-        new Functions(runtime);
-        new FunctionPlaceholder(runtime);
-        PlayerOperators.registerAll(runtime);
+    @Awake(LifeCycle.LOAD)
+    public static void init() {
+        new Functions(FluxonRuntime.getInstance());
+        new FunctionPlaceholder(FluxonRuntime.getInstance());
+        PlayerOperators.registerAll(FluxonRuntime.getInstance());
     }
 
     public static Object runFluxon(@NotNull final CommandSender sender, @NotNull final String script) {

@@ -5,10 +5,7 @@ import org.tabooproject.fluxon.parser.error.ParseException
 import org.tabooproject.fluxon.runtime.Environment
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import org.tabooproject.fluxon.runtime.RuntimeScriptBase
-import org.tabooproject.fluxon.runtime.error.FluxonRuntimeError
 import org.tabooproject.fluxon.runtime.library.LibraryLoader
-import org.tabooproject.fluxon.util.exceptFluxonCompletableFutureError
-import org.tabooproject.fluxon.util.printError
 import org.tabooproject.fluxon.util.toScriptId
 import org.tabooproject.fluxon.util.with
 import taboolib.common.LifeCycle
@@ -25,11 +22,22 @@ import kotlin.time.measureTime
 
 object FluxonLibrary {
 
-    // 脚本类加载器
-    val classLoader = FluxonClassLoader(FluxonLibrary::class.java.classLoader)
+    /**
+     * 脚本类加载器
+     *
+     * 使用可替换的 ClassLoader，每次 reload 时创建新实例。
+     * 旧的 ClassLoader 及其加载的所有类在失去引用后可被 GC 回收，
+     * 避免 Metaspace 内存泄漏。
+     */
+    lateinit var classLoader: FluxonClassLoader
+        private set
 
-    // 脚本库加载器
-    val libraryLoader = LibraryLoader(FluxonRuntime.getInstance(), classLoader)
+    /**
+     * 脚本库加载器
+     * 同样需要在 reload 时重建，因为它持有对 ClassLoader 的引用。
+     */
+    lateinit var libraryLoader: LibraryLoader
+        private set
 
     // 脚本容器
     val scripts = ConcurrentHashMap<String, FluxonScript>()
@@ -54,6 +62,9 @@ object FluxonLibrary {
     @Parallel("fluxon_library", runOn = LifeCycle.LOAD)
     fun reload() {
         unload()
+        // 创建新的 ClassLoader 和 LibraryLoader
+        classLoader = FluxonClassLoader(FluxonLibrary::class.java.classLoader)
+        libraryLoader = LibraryLoader(FluxonRuntime.getInstance(), classLoader)
         val time = measureTime {
             // 加载系统库
             getDataFolder().resolve("syslib").walk().forEach {
@@ -72,7 +83,10 @@ object FluxonLibrary {
     fun unload() {
         scripts.forEach { it.value.unload() }
         scripts.clear()
-        libraryLoader.unloadManagedResults()
+        // 如果此时 ClassLoader 和 LibraryLoader 已初始化，则卸载已加载的库
+        if (this::libraryLoader.isInitialized) {
+            libraryLoader.unloadManagedResults()
+        }
     }
 
     fun compileFolder(folder: File): Map<String, FluxonScript> {
@@ -83,7 +97,9 @@ object FluxonLibrary {
         folder.walk().toList().parallelStream().forEach {
             val entry = compileFile(it, environment)
             if (entry != null) {
-                scripts[entry.key] = entry.value
+                synchronized(scripts) {
+                    scripts[entry.key] = entry.value
+                }
             }
         }
         return scripts
@@ -94,10 +110,12 @@ object FluxonLibrary {
             // 编译文件
             try {
                 val className = "${file.nameWithoutExtension}_${System.currentTimeMillis()}"
-                val result = Fluxon.compile(file.readText(), className, environment, FluxonLibrary::class.java.classLoader)
-                val instance = result.createInstance(classLoader) as RuntimeScriptBase
-                val id = file.toScriptId()
+                // 编译并创建实例
+                val currentClassLoader = this.classLoader
+                val result = Fluxon.compile(file.readText(), className, environment, currentClassLoader)
+                val instance = result.createInstance(currentClassLoader) as RuntimeScriptBase
                 // 输出 class 文件
+                val id = file.toScriptId()
                 newFile(getDataFolder().resolve("classes/$id/${result.className}.class")).writeBytes(result.mainClass)
                 result.innerClasses.forEachIndexed { index, bytes ->
                     newFile(getDataFolder().resolve("classes/$id/${result.className}$$index.class")).writeBytes(bytes)

@@ -1,9 +1,14 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.generator
 
+import org.bukkit.Chunk
+import org.bukkit.World
 import org.bukkit.generator.BlockPopulator
+import org.bukkit.generator.LimitedRegion
+import org.bukkit.generator.WorldInfo
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.util.*
 
 object FnBlockPopulator {
     @Awake(LifeCycle.INIT)

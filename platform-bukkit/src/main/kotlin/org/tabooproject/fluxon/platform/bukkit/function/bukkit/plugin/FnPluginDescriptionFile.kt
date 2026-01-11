@@ -10,7 +10,6 @@ object FnPluginDescriptionFile {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(PluginDescriptionFile::class.java)
-                .function("construct", 0) { it.target?.construct() }
                 .function("toString", 0) { it.target?.toString() }
                 .function("name", 0) { it.target?.name }
                 .function("provides", 0) { it.target?.provides }
@@ -32,7 +31,6 @@ object FnPluginDescriptionFile {
                 .function("aPIVersion", 0) { it.target?.apiVersion }
                 .function("libraries", 0) { it.target?.libraries }
                 .function("classLoaderOf", 0) { it.target?.classLoaderOf }
-                .function("save", 1) { it.target?.save(it.getArgument(0) as Writer) }
         }
     }
 }

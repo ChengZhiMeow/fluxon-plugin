@@ -4,7 +4,6 @@ import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandMap
 import org.bukkit.command.CommandSender
-import org.spigotmc.CustomTimingsHandler
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -15,7 +14,7 @@ object FnCommand {
         with(FluxonRuntime.getInstance()) {
             registerExtension(Command::class.java)
                 .function("timings", 0) { it.target?.timings }
-                .function("setTimings", 1) { it.target?.timings = it.getArgument(0) as CustomTimingsHandler }
+//                .function("setTimings", 1) { it.target?.timings = it.getArgument(0) as CustomTimingsHandler }
                 .function("execute", 3) {
                     it.target?.execute(
                         it.getArgument(0) as CommandSender,

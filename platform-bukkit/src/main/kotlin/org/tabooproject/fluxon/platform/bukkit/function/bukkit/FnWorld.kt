@@ -632,10 +632,31 @@ object FnWorld {
                         it.getArgument(2) as Structure
                     )
                 }
+                .function("isDay", 0) { it.target?.isDay }
+                .function("isNight", 0) { it.target?.isNight }
+
             registerExtension(World.Environment::class.java)
                 .function("id", 0) { it.target?.id }
                 // static
                 .function("environment", 1) { World.Environment.getEnvironment(it.getNumber(0).toInt()) }
         }
     }
+
+    /**
+     * 世界是否为白天
+     *
+     * 根据世界时间判断是否为白天（时间在 0-12300 或 23850-24000 之间）。
+     * Minecraft 中一天为 24000 刻，白天约为 0-12300 刻。
+     */
+    private val World.isDay: Boolean
+        get() = time !in 12300..23850
+
+    /**
+     * 世界是否为黑夜
+     *
+     * 根据世界时间判断是否为黑夜（时间在 12301-23849 之间）。
+     * 黑夜期间怪物会自然生成。
+     */
+    private val World.isNight: Boolean
+        get() = time in 12301..23849
 }

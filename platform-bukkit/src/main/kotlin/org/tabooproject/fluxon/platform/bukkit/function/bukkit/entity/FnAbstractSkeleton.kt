@@ -1,7 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.entity
 
-import Skeleton.SkeletonType
 import org.bukkit.entity.AbstractSkeleton
+import org.bukkit.entity.Skeleton
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake

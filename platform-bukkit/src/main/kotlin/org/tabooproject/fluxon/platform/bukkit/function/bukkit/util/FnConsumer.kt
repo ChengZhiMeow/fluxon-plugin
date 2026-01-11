@@ -10,7 +10,7 @@ object FnConsumer {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(Consumer::class.java)
-                .function("accept", 1) { it.target?.accept(it.getArgument(0) as T) }
+                .function("accept", 1) { (it.target as? Consumer<Any>)?.accept(it.getArgument(0)!!) }
         }
     }
 }

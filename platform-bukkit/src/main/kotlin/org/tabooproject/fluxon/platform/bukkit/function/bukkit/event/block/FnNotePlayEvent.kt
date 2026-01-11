@@ -1,5 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.event.block
 
+import org.bukkit.Instrument
+import org.bukkit.Note
 import org.bukkit.event.block.NotePlayEvent
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle

@@ -4,6 +4,7 @@ import org.bukkit.plugin.PluginLogger
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.util.logging.LogRecord
 
 object FnPluginLogger {
     @Awake(LifeCycle.INIT)

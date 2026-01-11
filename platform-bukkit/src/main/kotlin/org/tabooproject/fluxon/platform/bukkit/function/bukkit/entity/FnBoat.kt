@@ -1,5 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.entity
 
+import org.bukkit.TreeSpecies
 import org.bukkit.entity.Boat
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
@@ -13,7 +14,7 @@ object FnBoat {
                 .function("woodType", 0) { it.target?.woodType }
                 .function("setWoodType", 1) { it.target?.setWoodType(it.getArgument(0) as TreeSpecies) }
                 .function("boatType", 0) { it.target?.boatType }
-                .function("setBoatType", 1) { it.target?.setBoatType(it.getArgument(0) as Type) }
+                .function("setBoatType", 1) { it.target?.setBoatType(it.getArgument(0) as Boat.Type) }
                 .function("maxSpeed", 0) { it.target?.maxSpeed }
                 .function("setMaxSpeed", 1) { it.target?.setMaxSpeed(it.getNumber(0).toDouble()) }
                 .function("occupiedDeceleration", 0) { it.target?.occupiedDeceleration }
@@ -31,7 +32,9 @@ object FnBoat {
                 .function("workOnLand", 0) { it.target?.workOnLand }
                 .function("setWorkOnLand", 1) { it.target?.setWorkOnLand(it.getBoolean(0)) }
                 .function("status", 0) { it.target?.status }
-                .function("material", 0) { it.target?.getMaterial() }
+
+            registerExtension(Boat.Type::class.java)
+                .function("material", 0) { it.target?.material }
         }
     }
 }

@@ -1,9 +1,11 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.plugin
 
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginLoader
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.io.File
 
 object FnPluginLoader {
     @Awake(LifeCycle.INIT)

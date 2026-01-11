@@ -16,6 +16,7 @@ object FnEntityEffect {
                     when (val var1 = it.getArgument(0)) {
                         is Entity -> it.target?.isApplicableTo(var1)
                         is Class<*> -> it.target?.isApplicableTo(var1 as Class<Entity>)
+                        else -> null
                     }
                 }
         }

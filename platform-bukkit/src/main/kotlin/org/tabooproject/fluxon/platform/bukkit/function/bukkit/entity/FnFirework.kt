@@ -1,6 +1,8 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.entity
 
 import org.bukkit.entity.Firework
+import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.meta.FireworkMeta
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake

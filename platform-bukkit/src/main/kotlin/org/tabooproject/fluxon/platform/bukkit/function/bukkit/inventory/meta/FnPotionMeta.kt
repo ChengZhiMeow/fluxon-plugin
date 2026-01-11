@@ -1,5 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.inventory.meta
 
+import org.bukkit.Color
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionData
 import org.bukkit.potion.PotionEffect

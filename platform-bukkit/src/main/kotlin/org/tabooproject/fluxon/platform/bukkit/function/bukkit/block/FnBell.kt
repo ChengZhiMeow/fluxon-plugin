@@ -17,6 +17,7 @@ object FnBell {
                     when (val var1 = it.getArgument(0)) {
                         is Entity -> it.target?.ring(var1)
                         is BlockFace -> it.target?.ring(var1)
+                        else -> null
                     }
                 }
                 .function("ring", 0) { it.target?.ring() }

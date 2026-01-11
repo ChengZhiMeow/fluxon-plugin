@@ -1,6 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.event.player
 
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
+import org.bukkit.inventory.ItemStack
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake

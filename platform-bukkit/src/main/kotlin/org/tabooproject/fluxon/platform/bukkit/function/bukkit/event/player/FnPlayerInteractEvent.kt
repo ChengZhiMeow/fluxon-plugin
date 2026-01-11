@@ -1,6 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.event.player
 
-import Event.Result
+import org.bukkit.event.Event
 import org.bukkit.event.player.PlayerInteractEvent
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle

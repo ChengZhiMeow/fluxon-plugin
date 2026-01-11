@@ -1,5 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.event.player
 
+import org.bukkit.entity.EntityType
 import org.bukkit.event.player.PlayerEggThrowEvent
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle

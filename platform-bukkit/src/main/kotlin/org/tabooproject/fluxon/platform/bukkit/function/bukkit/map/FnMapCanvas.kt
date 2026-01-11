@@ -1,5 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.map
 
+import org.bukkit.Color
 import org.bukkit.map.MapCanvas
 import org.bukkit.map.MapCursorCollection
 import org.bukkit.map.MapFont
@@ -20,7 +21,7 @@ object FnMapCanvas {
                     it.target?.setPixelColor(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
-                        it.getArgument(2) as Color
+                        (it.getArgument(2) as Color).let { color -> java.awt.Color(color.red, color.green, color.blue) }
                     )
                 }
                 .function("pixelColor", 2) {

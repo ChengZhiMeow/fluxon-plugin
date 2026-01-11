@@ -1,7 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.event.player
 
-import PlayerPreLoginEvent.Result
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
+import org.bukkit.event.player.PlayerPreLoginEvent
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -12,7 +12,10 @@ object FnAsyncPlayerPreLoginEvent {
         with(FluxonRuntime.getInstance()) {
             registerExtension(AsyncPlayerPreLoginEvent::class.java)
                 .function("loginResult", 0) { it.target?.loginResult }
-                .function("setLoginResult", 1) { it.target?.setLoginResult(it.getArgument(0) as Result) }
+                .function(
+                    "setLoginResult",
+                    1
+                ) { it.target?.setLoginResult(it.getArgument(0) as AsyncPlayerPreLoginEvent.Result) }
                 .function("setResult", 1) { it.target?.setResult(it.getArgument(0) as PlayerPreLoginEvent.Result) }
                 .function("kickMessage", 0) { it.target?.kickMessage }
                 .function("setKickMessage", 1) { it.target?.setKickMessage(it.getString(0)!!) }

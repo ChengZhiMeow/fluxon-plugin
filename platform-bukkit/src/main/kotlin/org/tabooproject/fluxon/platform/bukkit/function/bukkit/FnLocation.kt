@@ -9,6 +9,8 @@ import org.tabooproject.fluxon.platform.bukkit.util.multiply
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 import taboolib.platform.util.toProxyLocation
 
 /**
@@ -18,6 +20,7 @@ import taboolib.platform.util.toProxyLocation
  * @author Lynn
  * @since 2026/1/6
  */
+@PlatformSide(Platform.BUKKIT)
 object FnLocation {
 
     @Awake(LifeCycle.INIT)

@@ -11,5 +11,4 @@ import taboolib.common.platform.PlatformSide
     RuntimeDependency("org.ow2.asm:asm-commons:9.8"),
 )
 @PlatformSide(Platform.HYTALE)
-class FluxonHytale {
-}
+object FluxonHytale

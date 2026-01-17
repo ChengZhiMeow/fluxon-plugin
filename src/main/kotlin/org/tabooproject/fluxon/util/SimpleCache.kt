@@ -14,7 +14,7 @@ class SimpleCache<K : Any, V : Any>(
 
     private val store = ConcurrentHashMap<K, Entry<V>>()
 
-    fun get(key: K, loader: (K) -> V): V {
+    fun get(key: K, loader: (K) -> V?): V? {
         val now = System.currentTimeMillis()
         store[key]?.takeIf { now - it.accessTime <= expireAfterAccessMs }?.let {
             it.accessTime = now
@@ -27,6 +27,7 @@ class SimpleCache<K : Any, V : Any>(
             }
             val value = loader(key)
             evictIfNeeded()
+            if (value == null) return value
             store[key] = Entry(value, now)
             value
         }

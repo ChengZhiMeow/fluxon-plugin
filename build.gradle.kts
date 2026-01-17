@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
 import io.izzel.taboolib.gradle.Basic
 import io.izzel.taboolib.gradle.CommandHelper
 import io.izzel.taboolib.gradle.Bukkit
+import io.izzel.taboolib.gradle.BukkitHook
 import io.izzel.taboolib.gradle.BukkitNMS
 import io.izzel.taboolib.gradle.BukkitNMSUtil
 import io.izzel.taboolib.gradle.BukkitUtil
@@ -25,6 +26,7 @@ taboolib {
         install(CommandHelper)
         install(MinecraftChat)
         install(Bukkit)
+        install(BukkitHook)
         install(BukkitUtil)
         install(BukkitNMS)
         install(BukkitNMSUtil)
@@ -39,7 +41,7 @@ taboolib {
             name("sky")
         }
     }
-    version { taboolib = "6.2.4-16d06d2" }
+    version { taboolib = "6.2.4-62eb811" }
 }
 
 repositories {
@@ -48,8 +50,8 @@ repositories {
 }
 
 dependencies {
-    taboo("org.tabooproject.fluxon:core:1.4.6") { isTransitive = false }
-    taboo("org.tabooproject.fluxon:inst-core:1.4.6") { isTransitive = false }
+    taboo("org.tabooproject.fluxon:core:1.5.7") { isTransitive = false }
+    taboo("org.tabooproject.fluxon:inst-core:1.5.7") { isTransitive = false }
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
 }
@@ -82,7 +84,7 @@ configure(subprojects) {
             install(Basic)
             install(MinecraftChat)
         }
-        version { taboolib = "6.2.4-16d06d2" }
+        version { taboolib = "6.2.4-62eb811" }
     }
     
     repositories {
@@ -91,7 +93,7 @@ configure(subprojects) {
     }
     
     dependencies {
-        taboo("org.tabooproject.fluxon:core:1.4.6") { isTransitive = false }
+        taboo("org.tabooproject.fluxon:core:1.5.7") { isTransitive = false }
         compileOnly(kotlin("stdlib"))
         compileOnly(rootProject.fileTree("libs"))
     }

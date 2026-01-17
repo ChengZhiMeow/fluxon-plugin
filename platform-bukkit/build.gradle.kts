@@ -1,4 +1,5 @@
 import io.izzel.taboolib.gradle.Bukkit
+import io.izzel.taboolib.gradle.BukkitHook
 import io.izzel.taboolib.gradle.BukkitNMS
 import io.izzel.taboolib.gradle.BukkitNMSUtil
 import io.izzel.taboolib.gradle.BukkitUtil
@@ -6,6 +7,7 @@ import io.izzel.taboolib.gradle.BukkitUtil
 taboolib {
     env {
         install(Bukkit)
+        install(BukkitHook)
         install(BukkitUtil)
         install(BukkitNMS)
         install(BukkitNMSUtil)

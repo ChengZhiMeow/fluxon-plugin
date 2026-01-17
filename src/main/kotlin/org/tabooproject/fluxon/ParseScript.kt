@@ -1,6 +1,6 @@
 package org.tabooproject.fluxon
 
-import org.tabooproject.fluxon.parser.ParseResult
+import org.tabooproject.fluxon.parser.ParsedScript
 import org.tabooproject.fluxon.parser.expression.literal.Identifier
 import org.tabooproject.fluxon.parser.expression.literal.Literal
 import org.tabooproject.fluxon.parser.statement.ExpressionStatement
@@ -8,7 +8,9 @@ import org.tabooproject.fluxon.runtime.Environment
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import java.util.function.Consumer
 
-open class ParseScript(val blocks: List<ParseResult>?) {
+open class ParseScript(val script: ParsedScript?) {
+
+    val blocks = script?.results
 
     /**
      * 是否为明文（只有一个 Identifier 或者 Literal）
@@ -36,6 +38,6 @@ open class ParseScript(val blocks: List<ParseResult>?) {
                 else -> null
             }
         }
-        return FluxonShell.invoke(blocks, FluxonRuntime.getInstance().newEnvironment().also { env.accept(it) })
+        return FluxonShell.invoke(script!!, FluxonRuntime.getInstance().newEnvironment().also { env.accept(it) })
     }
 }

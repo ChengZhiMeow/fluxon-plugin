@@ -26,15 +26,19 @@ object FnPluginManager {
                 .function("plugin", 1) { it.target?.getPlugin(it.getString(0)!!) }
                 .function("plugins", 0) { it.target?.plugins }
                 .function("isPluginEnabled", 1) {
-                    // boolean isPluginEnabled(@NotNull String var1)
-                    // boolean isPluginEnabled(@Nullable Plugin var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.isPluginEnabled(var1)
+                        is Plugin -> it.target?.isPluginEnabled(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 Plugin 类型")
+                    }
                 }
                 .function("loadPlugin", 1) { it.target?.loadPlugin(it.getArgument(0) as File) }
                 .function("loadPlugins", 1) {
-                    // Plugin[] loadPlugins(@NotNull File var1)
-                    // Plugin[] loadPlugins(@NotNull File[] var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is File -> it.target?.loadPlugins(var1)
+                        is Array<*> -> it.target?.loadPlugins(var1 as Array<File>)
+                        else -> throw IllegalArgumentException("参数必须是 File 或 File[] 类型")
+                    }
                 }
                 .function("disablePlugins", 0) { it.target?.disablePlugins() }
                 .function("clearPlugins", 0) { it.target?.clearPlugins() }
@@ -69,9 +73,11 @@ object FnPluginManager {
                 .function("permission", 1) { it.target?.getPermission(it.getString(0)!!) }
                 .function("addPermission", 1) { it.target?.addPermission(it.getArgument(0) as Permission) }
                 .function("removePermission", 1) {
-                    // void removePermission(@NotNull Permission var1)
-                    // void removePermission(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Permission -> it.target?.removePermission(var1)
+                        is String -> it.target?.removePermission(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Permission 或 String 类型")
+                    }
                 }
                 .function("defaultPermissions", 1) { it.target?.getDefaultPermissions(it.getBoolean(0)) }
                 .function("recalculatePermissionDefaults", 1) {

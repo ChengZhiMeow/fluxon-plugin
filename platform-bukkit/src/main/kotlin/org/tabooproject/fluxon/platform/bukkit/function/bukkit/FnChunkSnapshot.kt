@@ -1,6 +1,8 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit
 
 import org.bukkit.ChunkSnapshot
+import org.bukkit.block.Biome
+import org.bukkit.block.data.BlockData
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -78,9 +80,11 @@ object FnChunkSnapshot {
                 .function("captureFullTime", 0) { it.target?.captureFullTime }
                 .function("isSectionEmpty", 1) { it.target?.isSectionEmpty(it.getNumber(0).toInt()) }
                 .function("contains", 1) {
-                    // boolean contains(@NotNull BlockData var1)
-                    // boolean contains(@NotNull Biome var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is BlockData -> it.target?.contains(var1)
+                        is Biome -> it.target?.contains(var1)
+                        else -> throw IllegalArgumentException("参数必须是 BlockData 或 Biome 类型")
+                    }
                 }
         }
     }

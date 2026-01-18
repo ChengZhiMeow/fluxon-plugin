@@ -1,6 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.permissions
 
 import org.bukkit.permissions.PermissibleBase
+import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionAttachment
 import org.bukkit.plugin.Plugin
 import org.tabooproject.fluxon.runtime.FluxonRuntime
@@ -15,14 +16,18 @@ object FnPermissibleBase {
                 .function("isOp", 0) { it.target?.isOp }
                 .function("setOp", 1) { it.target?.setOp(it.getBoolean(0)) }
                 .function("isPermissionSet", 1) {
-                    // boolean isPermissionSet(@NotNull String name)
-                    // boolean isPermissionSet(@NotNull Permission perm)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.isPermissionSet(var1)
+                        is Permission -> it.target?.isPermissionSet(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 Permission 类型")
+                    }
                 }
                 .function("hasPermission", 1) {
-                    // boolean hasPermission(@NotNull String inName)
-                    // boolean hasPermission(@NotNull Permission perm)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.hasPermission(var1)
+                        is Permission -> it.target?.hasPermission(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 Permission 类型")
+                    }
                 }
                 .function("addAttachment", 3) {
                     it.target?.addAttachment(

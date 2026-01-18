@@ -1,6 +1,8 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.util
 
+import org.bukkit.Location
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
 import org.tabooproject.fluxon.runtime.FluxonRuntime
@@ -14,18 +16,34 @@ object FnBoundingBox {
             registerExtension(BoundingBox::class.java)
                 // static
                 .function("of", 2) {
-                    // static BoundingBox of(@NotNull Vector corner1, @NotNull Vector corner2)
-                    // static BoundingBox of(@NotNull Location corner1, @NotNull Location corner2)
-                    // static BoundingBox of(@NotNull Block corner1, @NotNull Block corner2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> BoundingBox.of(var1, it.getArgument(1) as Vector)
+                        is Location -> BoundingBox.of(var1, it.getArgument(1) as Location)
+                        is Block -> BoundingBox.of(var1, it.getArgument(1) as Block)
+                        else -> throw IllegalArgumentException("参数必须是 Vector、Location 或 Block 类型")
+                    }
                 }
                 // static
                 .function("of", 1) { BoundingBox.of(it.getArgument(0) as Block) }
                 // static
                 .function("of", 4) {
-                    // static BoundingBox of(@NotNull Vector center, double x, double y, double z)
-                    // static BoundingBox of(@NotNull Location center, double x, double y, double z)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> BoundingBox.of(
+                            var1,
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toDouble()
+                        )
+
+                        is Location -> BoundingBox.of(
+                            var1,
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toDouble()
+                        )
+
+                        else -> throw IllegalArgumentException("第一个参数必须是 Vector 或 Location 类型")
+                    }
                 }
                 .function("resize", 6) {
                     it.target?.resize(
@@ -72,9 +90,12 @@ object FnBoundingBox {
                     )
                 }
                 .function("expand", 1) {
-                    // BoundingBox expand(@NotNull Vector expansion)
-                    // BoundingBox expand(double expansion)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> it.target?.expand(var1)
+                        is Double -> it.target?.expand(var1)
+                        is Number -> it.target?.expand(var1.toDouble())
+                        else -> throw IllegalArgumentException("参数必须是 Vector 或 Double 类型")
+                    }
                 }
                 .function("expand", 4) {
                     it.target?.expand(
@@ -85,9 +106,11 @@ object FnBoundingBox {
                     )
                 }
                 .function("expand", 2) {
-                    // BoundingBox expand(@NotNull Vector direction, double expansion)
-                    // BoundingBox expand(@NotNull BlockFace blockFace, double expansion)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> it.target?.expand(var1, it.getNumber(1).toDouble())
+                        is BlockFace -> it.target?.expand(var1, it.getNumber(1).toDouble())
+                        else -> throw IllegalArgumentException("第一个参数必须是 Vector 或 BlockFace 类型")
+                    }
                 }
                 .function("expandDirectional", 3) {
                     it.target?.expandDirectional(
@@ -105,10 +128,12 @@ object FnBoundingBox {
                     )
                 }
                 .function("union", 1) {
-                    // BoundingBox union(@NotNull Vector position)
-                    // BoundingBox union(@NotNull Location position)
-                    // BoundingBox union(@NotNull BoundingBox other)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> it.target?.union(var1)
+                        is Location -> it.target?.union(var1)
+                        is BoundingBox -> it.target?.union(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Vector、Location 或 BoundingBox 类型")
+                    }
                 }
                 .function("intersection", 1) { it.target?.intersection(it.getArgument(0) as BoundingBox) }
                 .function("shift", 3) {
@@ -119,9 +144,11 @@ object FnBoundingBox {
                     )
                 }
                 .function("shift", 1) {
-                    // BoundingBox shift(@NotNull Vector shift)
-                    // BoundingBox shift(@NotNull Location shift)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> it.target?.shift(var1)
+                        is Location -> it.target?.shift(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Vector 或 Location 类型")
+                    }
                 }
                 .function("overlaps", 1) { it.target?.overlaps(it.getArgument(0) as BoundingBox) }
                 .function("overlaps", 2) {
@@ -138,9 +165,11 @@ object FnBoundingBox {
                     )
                 }
                 .function("contains", 1) {
-                    // boolean contains(@NotNull Vector position)
-                    // boolean contains(@NotNull BoundingBox other)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Vector -> it.target?.contains(var1)
+                        is BoundingBox -> it.target?.contains(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Vector 或 BoundingBox 类型")
+                    }
                 }
                 .function("contains", 2) {
                     it.target?.contains(

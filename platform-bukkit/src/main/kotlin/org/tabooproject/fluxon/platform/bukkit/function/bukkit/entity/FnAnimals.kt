@@ -1,6 +1,8 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.entity
 
+import org.bukkit.Material
 import org.bukkit.entity.Animals
+import org.bukkit.inventory.ItemStack
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -17,9 +19,11 @@ object FnAnimals {
                 .function("loveModeTicks", 0) { it.target?.loveModeTicks }
                 .function("setLoveModeTicks", 1) { it.target?.setLoveModeTicks(it.getNumber(0).toInt()) }
                 .function("isBreedItem", 1) {
-                    // boolean isBreedItem(@NotNull ItemStack var1)
-                    // boolean isBreedItem(@NotNull Material var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is ItemStack -> it.target?.isBreedItem(var1)
+                        is Material -> it.target?.isBreedItem(var1)
+                        else -> throw IllegalArgumentException("参数必须是 ItemStack 或 Material 类型")
+                    }
                 }
         }
     }

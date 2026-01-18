@@ -31,14 +31,26 @@ object FnEntity {
                     )
                 }
                 .function("teleport", 1) {
-                    // boolean teleport(@NotNull Location var1)
-                    // boolean teleport(@NotNull Entity var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> it.target?.teleport(var1)
+                        is Entity -> it.target?.teleport(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("teleport", 2) {
-                    // boolean teleport(@NotNull Location var1, @NotNull PlayerTeleportEvent.TeleportCause var2)
-                    // boolean teleport(@NotNull Entity var1, @NotNull PlayerTeleportEvent.TeleportCause var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> it.target?.teleport(
+                            var1,
+                            it.getArgument(1) as org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
+                        )
+
+                        is Entity -> it.target?.teleport(
+                            var1,
+                            it.getArgument(1) as org.bukkit.event.player.PlayerTeleportEvent.TeleportCause
+                        )
+
+                        else -> throw IllegalArgumentException("参数必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("nearbyEntities", 3) {
                     it.target?.getNearbyEntities(

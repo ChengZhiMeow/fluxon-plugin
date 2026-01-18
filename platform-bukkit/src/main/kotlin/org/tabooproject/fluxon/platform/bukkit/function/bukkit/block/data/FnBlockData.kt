@@ -1,5 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.block.data
 
+import org.bukkit.Location
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockSupport
 import org.bukkit.block.data.BlockData
@@ -28,9 +30,11 @@ object FnBlockData {
                 .function("isPreferredTool", 1) { it.target?.isPreferredTool(it.getArgument(0) as ItemStack) }
                 .function("pistonMoveReaction", 0) { it.target?.pistonMoveReaction }
                 .function("isSupported", 1) {
-                    // boolean isSupported(@NotNull Block var1)
-                    // boolean isSupported(@NotNull Location var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Block -> it.target?.isSupported(var1)
+                        is Location -> it.target?.isSupported(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Block 或 Location 类型")
+                    }
                 }
                 .function("isFaceSturdy", 2) {
                     it.target?.isFaceSturdy(

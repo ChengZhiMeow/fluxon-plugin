@@ -21,9 +21,11 @@ object FnPerlinNoiseGenerator {
                 }
                 // static
                 .function("noise", 3) {
-                    // static double getNoise(double x, double y, double z)
-                    // double noise(double x, double y, double z)
-                    TODO()
+                    PerlinNoiseGenerator.getNoise(
+                        it.getNumber(0).toDouble(),
+                        it.getNumber(1).toDouble(),
+                        it.getNumber(2).toDouble()
+                    )
                 }
                 // static
                 .function("instance", 0) { PerlinNoiseGenerator.getInstance() }

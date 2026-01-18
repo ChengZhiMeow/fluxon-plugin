@@ -6,6 +6,9 @@ import org.bukkit.structure.StructureManager
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
 object FnStructureManager {
     @Awake(LifeCycle.INIT)
@@ -30,17 +33,21 @@ object FnStructureManager {
                     )
                 }
                 .function("loadStructure", 1) {
-                    // Structure loadStructure(@NotNull NamespacedKey var1)
-                    // Structure loadStructure(@NotNull File var1)
-                    // Structure loadStructure(@NotNull InputStream var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is NamespacedKey -> it.target?.loadStructure(var1)
+                        is File -> it.target?.loadStructure(var1)
+                        is InputStream -> it.target?.loadStructure(var1)
+                        else -> throw IllegalArgumentException("参数必须是 NamespacedKey、File 或 InputStream 类型")
+                    }
                 }
                 .function("saveStructure", 1) { it.target?.saveStructure(it.getArgument(0) as NamespacedKey) }
                 .function("saveStructure", 2) {
-                    // void saveStructure(@NotNull NamespacedKey var1, @NotNull Structure var2)
-                    // void saveStructure(@NotNull File var1, @NotNull Structure var2)
-                    // void saveStructure(@NotNull OutputStream var1, @NotNull Structure var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is NamespacedKey -> it.target?.saveStructure(var1, it.getArgument(1) as Structure)
+                        is File -> it.target?.saveStructure(var1, it.getArgument(1) as Structure)
+                        is OutputStream -> it.target?.saveStructure(var1, it.getArgument(1) as Structure)
+                        else -> throw IllegalArgumentException("第一个参数必须是 NamespacedKey、File 或 OutputStream 类型")
+                    }
                 }
                 .function("deleteStructure", 1) { it.target?.deleteStructure(it.getArgument(0) as NamespacedKey) }
                 .function("deleteStructure", 2) {

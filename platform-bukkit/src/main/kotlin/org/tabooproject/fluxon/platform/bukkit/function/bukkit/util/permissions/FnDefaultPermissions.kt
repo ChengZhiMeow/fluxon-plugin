@@ -19,22 +19,49 @@ object FnDefaultPermissions {
                 ) { DefaultPermissions.registerPermission(it.getArgument(0) as Permission) }
                 // static
                 .function("registerPermission", 2) {
-                    // static Permission registerPermission(@NotNull Permission perm, boolean withLegacy)
-                    // static Permission registerPermission(@NotNull Permission perm, @NotNull Permission parent)
-                    // static Permission registerPermission(@NotNull String name, @Nullable String desc)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Permission -> when (val var2 = it.getArgument(1)) {
+                            is Boolean -> DefaultPermissions.registerPermission(var1, var2)
+                            is Permission -> DefaultPermissions.registerPermission(var1, var2)
+                            else -> throw IllegalArgumentException("第二个参数必须是 Boolean 或 Permission 类型")
+                        }
+
+                        is String -> DefaultPermissions.registerPermission(var1, it.getString(1))
+                        else -> throw IllegalArgumentException("第一个参数必须是 Permission 或 String 类型")
+                    }
                 }
                 // static
                 .function("registerPermission", 3) {
-                    // static Permission registerPermission(@NotNull String name, @Nullable String desc, @NotNull Permission parent)
-                    // static Permission registerPermission(@NotNull String name, @Nullable String desc, @Nullable PermissionDefault def)
-                    TODO()
+                    when (val var3 = it.getArgument(2)) {
+                        is Permission -> DefaultPermissions.registerPermission(it.getString(0)!!, it.getString(1), var3)
+                        is PermissionDefault -> DefaultPermissions.registerPermission(
+                            it.getString(0)!!,
+                            it.getString(1),
+                            var3
+                        )
+
+                        else -> throw IllegalArgumentException("第三个参数必须是 Permission 或 PermissionDefault 类型")
+                    }
                 }
                 // static
                 .function("registerPermission", 4) {
-                    // static Permission registerPermission(@NotNull String name, @Nullable String desc, @Nullable PermissionDefault def, @NotNull Permission parent)
-                    // static Permission registerPermission(@NotNull String name, @Nullable String desc, @Nullable PermissionDefault def, @Nullable Map<String, Boolean> children)
-                    TODO()
+                    when (val var4 = it.getArgument(3)) {
+                        is Permission -> DefaultPermissions.registerPermission(
+                            it.getString(0)!!,
+                            it.getString(1),
+                            it.getArgument(2) as PermissionDefault,
+                            var4
+                        )
+
+                        is Map<*, *> -> DefaultPermissions.registerPermission(
+                            it.getString(0)!!,
+                            it.getString(1),
+                            it.getArgument(2) as PermissionDefault,
+                            var4 as Map<String, Boolean>
+                        )
+
+                        else -> throw IllegalArgumentException("第四个参数必须是 Permission 或 Map<String, Boolean> 类型")
+                    }
                 }
                 // static
                 .function("registerPermission", 5) {

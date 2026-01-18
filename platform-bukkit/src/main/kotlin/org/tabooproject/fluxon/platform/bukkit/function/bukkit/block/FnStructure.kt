@@ -4,6 +4,7 @@ import org.bukkit.block.Structure
 import org.bukkit.block.structure.Mirror
 import org.bukkit.block.structure.StructureRotation
 import org.bukkit.block.structure.UsageMode
+import org.bukkit.entity.LivingEntity
 import org.bukkit.util.BlockVector
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
@@ -18,9 +19,11 @@ object FnStructure {
                 .function("setStructureName", 1) { it.target?.setStructureName(it.getString(0)!!) }
                 .function("author", 0) { it.target?.author }
                 .function("setAuthor", 1) {
-                    // void setAuthor(@NotNull String var1)
-                    // void setAuthor(@NotNull LivingEntity var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.author = var1
+                        is LivingEntity -> it.target?.setAuthor(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 LivingEntity 类型")
+                    }
                 }
                 .function("relativePosition", 0) { it.target?.relativePosition }
                 .function("setRelativePosition", 1) { it.target?.setRelativePosition(it.getArgument(0) as BlockVector) }

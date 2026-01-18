@@ -15,9 +15,7 @@ object FnInventoryView {
                 .function("bottomInventory", 0) { it.target?.bottomInventory }
                 .function("player", 0) { it.target?.player }
                 .function("type", 0) {
-                    // InventoryType getType()
-                    // InventoryType getType()
-                    TODO()
+                    it.target?.type
                 }
                 .function("setItem", 2) { it.target?.setItem(it.getNumber(0).toInt(), it.getArgument(1) as ItemStack) }
                 .function("item", 1) { it.target?.getItem(it.getNumber(0).toInt()) }

@@ -19,9 +19,11 @@ object FnPermission {
                 .function("permissibles", 0) { it.target?.permissibles }
                 .function("recalculatePermissibles", 0) { it.target?.recalculatePermissibles() }
                 .function("addParent", 2) {
-                    // Permission addParent(@NotNull String name, boolean value)
-                    // void addParent(@NotNull Permission perm, boolean value)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.addParent(var1, it.getBoolean(1))
+                        is Permission -> it.target?.addParent(var1, it.getBoolean(1))
+                        else -> throw IllegalArgumentException("参数必须是 String 或 Permission 类型")
+                    }
                 }
                 // static
                 .function("loadPermissions", 3) {

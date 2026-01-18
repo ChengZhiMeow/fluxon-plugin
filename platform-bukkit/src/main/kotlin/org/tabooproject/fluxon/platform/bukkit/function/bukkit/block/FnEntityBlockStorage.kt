@@ -16,7 +16,10 @@ object FnEntityBlockStorage {
                 .function("maxEntities", 0) { it.target?.maxEntities }
                 .function("setMaxEntities", 1) { it.target?.setMaxEntities(it.getNumber(0).toInt()) }
                 .function("releaseEntities", 0) { it.target?.releaseEntities() }
-                .function("addEntity", 1) { (it.target as? EntityBlockStorage<Entity>)?.addEntity(it.getArgument(0) as Entity) }
+                .function(
+                    "addEntity",
+                    1
+                ) { (it.target as? EntityBlockStorage<Entity>)?.addEntity(it.getArgument(0) as Entity) }
         }
     }
 }

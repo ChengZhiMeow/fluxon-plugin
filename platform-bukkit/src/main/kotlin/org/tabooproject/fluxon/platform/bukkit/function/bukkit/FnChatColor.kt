@@ -16,9 +16,11 @@ object FnChatColor {
                 .function("isColor", 0) { it.target?.isColor }
                 // static
                 .function("byChar", 1) {
-                    // static ChatColor getByChar(char code)
-                    // static ChatColor getByChar(@NotNull String code)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Char -> ChatColor.getByChar(var1)
+                        is String -> ChatColor.getByChar(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Char 或 String 类型")
+                    }
                 }
                 // static
                 .function("stripColor", 1) { ChatColor.stripColor(it.getString(0)) }

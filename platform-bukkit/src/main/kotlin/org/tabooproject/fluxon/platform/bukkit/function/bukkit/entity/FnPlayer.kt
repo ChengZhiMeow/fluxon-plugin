@@ -20,6 +20,8 @@ import org.bukkit.scoreboard.Scoreboard
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.time.Duration
+import java.time.Instant
 import java.util.*
 
 object FnPlayer {
@@ -49,16 +51,20 @@ object FnPlayer {
                 .function("sendRawMessage", 1) { it.target?.sendRawMessage(it.getString(0)!!) }
                 .function("kickPlayer", 1) { it.target?.kickPlayer(it.getString(0)) }
                 .function("ban", 4) {
-                    // BanEntry<PlayerProfile> ban(@Nullable String var1, @Nullable Date var2, @Nullable String var3, boolean var4)
-                    // BanEntry<PlayerProfile> ban(@Nullable String var1, @Nullable Instant var2, @Nullable String var3, boolean var4)
-                    // BanEntry<PlayerProfile> ban(@Nullable String var1, @Nullable Duration var2, @Nullable String var3, boolean var4)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is Date -> it.target?.ban(it.getString(0), var2, it.getString(2), it.getBoolean(3))
+                        is Instant -> it.target?.ban(it.getString(0), var2, it.getString(2), it.getBoolean(3))
+                        is Duration -> it.target?.ban(it.getString(0), var2, it.getString(2), it.getBoolean(3))
+                        else -> throw IllegalArgumentException("参数2必须是 Date, Instant, 或 Duration 类型")
+                    }
                 }
                 .function("banIp", 4) {
-                    // BanEntry<InetAddress> banIp(@Nullable String var1, @Nullable Date var2, @Nullable String var3, boolean var4)
-                    // BanEntry<InetAddress> banIp(@Nullable String var1, @Nullable Instant var2, @Nullable String var3, boolean var4)
-                    // BanEntry<InetAddress> banIp(@Nullable String var1, @Nullable Duration var2, @Nullable String var3, boolean var4)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is Date -> it.target?.banIp(it.getString(0), var2, it.getString(2), it.getBoolean(3))
+                        is Instant -> it.target?.banIp(it.getString(0), var2, it.getString(2), it.getBoolean(3))
+                        is Duration -> it.target?.banIp(it.getString(0), var2, it.getString(2), it.getBoolean(3))
+                        else -> throw IllegalArgumentException("参数2必须是 Date, Instant, 或 Duration 类型")
+                    }
                 }
                 .function("chat", 1) { it.target?.chat(it.getString(0)!!) }
                 .function("performCommand", 1) { it.target?.performCommand(it.getString(0)!!) }
@@ -88,41 +94,166 @@ object FnPlayer {
                     )
                 }
                 .function("playNote", 3) {
-                    // void playNote(@NotNull Location var1, byte var2, byte var3)
-                    // void playNote(@NotNull Location var1, @NotNull Instrument var2, @NotNull Note var3)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is Byte -> it.target?.playNote(it.getArgument(0) as Location, var2, it.getNumber(2).toByte())
+                        is Instrument -> it.target?.playNote(
+                            it.getArgument(0) as Location,
+                            var2,
+                            it.getArgument(2) as Note
+                        )
+
+                        else -> throw IllegalArgumentException("参数2必须是 Byte 或 Instrument 类型")
+                    }
                 }
                 .function("playSound", 4) {
-                    // void playSound(@NotNull Location var1, @NotNull Sound var2, float var3, float var4)
-                    // void playSound(@NotNull Location var1, @NotNull String var2, float var3, float var4)
-                    // void playSound(@NotNull Entity var1, @NotNull Sound var2, float var3, float var4)
-                    // void playSound(@NotNull Entity var1, @NotNull String var2, float var3, float var4)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("参数2必须是 Sound 或 String 类型")
+                        }
+
+                        is Entity -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("参数2必须是 Sound 或 String 类型")
+                        }
+
+                        else -> throw IllegalArgumentException("参数1必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("playSound", 5) {
-                    // void playSound(@NotNull Location var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5)
-                    // void playSound(@NotNull Location var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5)
-                    // void playSound(@NotNull Entity var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5)
-                    // void playSound(@NotNull Entity var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("参数2必须是 Sound 或 String 类型")
+                        }
+
+                        is Entity -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("参数2必须是 Sound 或 String 类型")
+                        }
+
+                        else -> throw IllegalArgumentException("参数1必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("playSound", 6) {
-                    // void playSound(@NotNull Location var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    // void playSound(@NotNull Location var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    // void playSound(@NotNull Entity var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    // void playSound(@NotNull Entity var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            else -> throw IllegalArgumentException("参数2必须是 Sound 或 String 类型")
+                        }
+
+                        is Entity -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            else -> throw IllegalArgumentException("参数2必须是 Sound 或 String 类型")
+                        }
+
+                        else -> throw IllegalArgumentException("参数1必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("stopSound", 1) {
-                    // void stopSound(@NotNull Sound var1)
-                    // void stopSound(@NotNull String var1)
-                    // void stopSound(@NotNull SoundCategory var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Sound -> it.target?.stopSound(var1)
+                        is String -> it.target?.stopSound(var1)
+                        is SoundCategory -> it.target?.stopSound(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Sound, String, 或 SoundCategory 类型")
+                    }
                 }
                 .function("stopSound", 2) {
-                    // void stopSound(@NotNull Sound var1, @Nullable SoundCategory var2)
-                    // void stopSound(@NotNull String var1, @Nullable SoundCategory var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Sound -> it.target?.stopSound(var1, it.getArgument(1) as? SoundCategory)
+                        is String -> it.target?.stopSound(var1, it.getArgument(1) as? SoundCategory)
+                        else -> throw IllegalArgumentException("参数1必须是 Sound 或 String 类型")
+                    }
                 }
                 .function("stopAllSounds", 0) { it.target?.stopAllSounds() }
                 .function("playEffect", 3) {
@@ -161,9 +292,21 @@ object FnPlayer {
                     )
                 }
                 .function("sendBlockDamage", 3) {
-                    // void sendBlockDamage(@NotNull Location var1, float var2, @NotNull Entity var3)
-                    // void sendBlockDamage(@NotNull Location var1, float var2, int var3)
-                    TODO()
+                    when (val var3 = it.getArgument(2)) {
+                        is Entity -> it.target?.sendBlockDamage(
+                            it.getArgument(0) as Location,
+                            it.getNumber(1).toFloat(),
+                            var3
+                        )
+
+                        is Int -> it.target?.sendBlockDamage(
+                            it.getArgument(0) as Location,
+                            it.getNumber(1).toFloat(),
+                            var3
+                        )
+
+                        else -> throw IllegalArgumentException("参数3必须是 Entity 或 Int 类型")
+                    }
                 }
                 .function("sendEquipmentChange", 3) {
                     it.target?.sendEquipmentChange(
@@ -274,9 +417,11 @@ object FnPlayer {
                     )
                 }
                 .function("canSee", 1) {
-                    // boolean canSee(@NotNull Player var1)
-                    // boolean canSee(@NotNull Entity var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Player -> it.target?.canSee(var1)
+                        is Entity -> it.target?.canSee(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Player 或 Entity 类型")
+                    }
                 }
                 .function("hideEntity", 2) {
                     it.target?.hideEntity(
@@ -305,9 +450,21 @@ object FnPlayer {
                     )
                 }
                 .function("setResourcePack", 3) {
-                    // void setResourcePack(@NotNull String var1, @Nullable byte[] var2, @Nullable String var3)
-                    // void setResourcePack(@NotNull String var1, @Nullable byte[] var2, boolean var3)
-                    TODO()
+                    when (val var3 = it.getArgument(2)) {
+                        is String -> it.target?.setResourcePack(
+                            it.getString(0)!!,
+                            it.getArgument(1) as? ByteArray,
+                            var3
+                        )
+
+                        is Boolean -> it.target?.setResourcePack(
+                            it.getString(0)!!,
+                            it.getArgument(1) as? ByteArray,
+                            var3
+                        )
+
+                        else -> throw IllegalArgumentException("参数3必须是 String 或 Boolean 类型")
+                    }
                 }
                 .function("setResourcePack", 4) {
                     it.target?.setResourcePack(

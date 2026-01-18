@@ -1,5 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.entity
 
+import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.entity.EntitySnapshot
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
@@ -11,9 +13,11 @@ object FnEntitySnapshot {
         with(FluxonRuntime.getInstance()) {
             registerExtension(EntitySnapshot::class.java)
                 .function("createEntity", 1) {
-                    // Entity createEntity(@NotNull World var1)
-                    // Entity createEntity(@NotNull Location var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is World -> it.target?.createEntity(var1)
+                        is Location -> it.target?.createEntity(var1)
+                        else -> throw IllegalArgumentException("参数必须是 World 或 Location 类型")
+                    }
                 }
                 .function("entityType", 0) { it.target?.entityType }
         }

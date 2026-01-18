@@ -32,15 +32,19 @@ object FnNumberConversions {
                 .function("toByte", 1) { NumberConversions.toByte(it.getArgument(0)) }
                 // static
                 .function("isFinite", 1) {
-                    // static boolean isFinite(double d)
-                    // static boolean isFinite(float f)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Double -> NumberConversions.isFinite(var1)
+                        is Float -> NumberConversions.isFinite(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Double 或 Float 类型")
+                    }
                 }
                 // static
                 .function("checkFinite", 2) {
-                    // static void checkFinite(double d, @NotNull String message)
-                    // static void checkFinite(float d, @NotNull String message)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Double -> NumberConversions.checkFinite(var1, it.getString(1)!!)
+                        is Float -> NumberConversions.checkFinite(var1, it.getString(1)!!)
+                        else -> throw IllegalArgumentException("第一个参数必须是 Double 或 Float 类型")
+                    }
                 }
         }
     }

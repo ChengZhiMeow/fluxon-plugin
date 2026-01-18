@@ -1,5 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.scoreboard
 
+import org.bukkit.OfflinePlayer
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.RenderType
@@ -25,9 +26,11 @@ object FnObjective {
                 .function("setRenderType", 1) { it.target?.setRenderType(it.getArgument(0) as RenderType) }
                 .function("renderType", 0) { it.target?.renderType }
                 .function("score", 1) {
-                    // Score getScore(@NotNull OfflinePlayer var1)
-                    // Score getScore(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is OfflinePlayer -> it.target?.getScore(var1)
+                        is String -> it.target?.getScore(var1)
+                        else -> throw IllegalArgumentException("参数必须是 OfflinePlayer 或 String 类型")
+                    }
                 }
         }
     }

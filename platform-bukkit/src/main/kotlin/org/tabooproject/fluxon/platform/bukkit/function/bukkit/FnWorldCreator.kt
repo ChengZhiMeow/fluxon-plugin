@@ -4,6 +4,8 @@ import org.bukkit.World
 import org.bukkit.WorldCreator
 import org.bukkit.WorldType
 import org.bukkit.command.CommandSender
+import org.bukkit.generator.BiomeProvider
+import org.bukkit.generator.ChunkGenerator
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -14,9 +16,11 @@ object FnWorldCreator {
         with(FluxonRuntime.getInstance()) {
             registerExtension(WorldCreator::class.java)
                 .function("copy", 1) {
-                    // WorldCreator copy(@NotNull World world)
-                    // WorldCreator copy(@NotNull WorldCreator creator)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is World -> it.target?.copy(var1)
+                        is WorldCreator -> it.target?.copy(var1)
+                        else -> throw IllegalArgumentException("参数必须是 World 或 WorldCreator 类型")
+                    }
                 }
                 .function("name", 0) { it.target?.name() }
                 .function("seed", 0) { it.target?.seed() }
@@ -26,16 +30,20 @@ object FnWorldCreator {
                 .function("type", 1) { it.target?.type(it.getArgument(0) as WorldType) }
                 .function("generator", 0) { it.target?.generator() }
                 .function("generator", 1) {
-                    // WorldCreator generator(@Nullable ChunkGenerator generator)
-                    // WorldCreator generator(@Nullable String generator)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is ChunkGenerator -> it.target?.generator(var1)
+                        is String -> it.target?.generator(var1)
+                        else -> throw IllegalArgumentException("参数必须是 ChunkGenerator 或 String 类型")
+                    }
                 }
                 .function("generator", 2) { it.target?.generator(it.getString(0), it.getArgument(1) as CommandSender) }
                 .function("biomeProvider", 0) { it.target?.biomeProvider() }
                 .function("biomeProvider", 1) {
-                    // WorldCreator biomeProvider(@Nullable BiomeProvider biomeProvider)
-                    // WorldCreator biomeProvider(@Nullable String biomeProvider)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is BiomeProvider -> it.target?.biomeProvider(var1)
+                        is String -> it.target?.biomeProvider(var1)
+                        else -> throw IllegalArgumentException("参数必须是 BiomeProvider 或 String 类型")
+                    }
                 }
                 .function("biomeProvider", 2) {
                     it.target?.biomeProvider(

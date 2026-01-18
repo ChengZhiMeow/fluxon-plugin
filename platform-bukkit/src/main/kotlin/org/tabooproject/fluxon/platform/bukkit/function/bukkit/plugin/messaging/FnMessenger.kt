@@ -60,9 +60,11 @@ object FnMessenger {
                 .function("incomingChannels", 0) { it.target?.incomingChannels }
                 .function("incomingChannels", 1) { it.target?.getIncomingChannels(it.getArgument(0) as Plugin) }
                 .function("incomingChannelRegistrations", 1) {
-                    // Set<PluginMessageListenerRegistration> getIncomingChannelRegistrations(@NotNull Plugin var1)
-                    // Set<PluginMessageListenerRegistration> getIncomingChannelRegistrations(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Plugin -> it.target?.getIncomingChannelRegistrations(var1)
+                        is String -> it.target?.getIncomingChannelRegistrations(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Plugin 或 String 类型")
+                    }
                 }
                 .function(
                     "incomingChannelRegistrations",

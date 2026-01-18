@@ -6,11 +6,16 @@ import org.bukkit.boss.BarStyle
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.entity.SpawnCategory
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.Recipe
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.awt.image.BufferedImage
+import java.io.File
+import java.net.InetAddress
 import java.util.*
 
 object FnServer {
@@ -63,9 +68,11 @@ object FnServer {
                 .function("ticksPerAmbientSpawns", 0) { it.target?.ticksPerAmbientSpawns }
                 .function("ticksPerSpawns", 1) { it.target?.getTicksPerSpawns(it.getArgument(0) as SpawnCategory) }
                 .function("player", 1) {
-                    // Player getPlayer(@NotNull String var1)
-                    // Player getPlayer(@NotNull UUID var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.getPlayer(var1)
+                        is UUID -> it.target?.getPlayer(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 UUID 类型")
+                    }
                 }
                 .function("playerExact", 1) { it.target?.getPlayerExact(it.getString(0)!!) }
                 .function("matchPlayer", 1) { it.target?.matchPlayer(it.getString(0)!!) }
@@ -75,14 +82,18 @@ object FnServer {
                 .function("worlds", 0) { it.target?.worlds }
                 .function("createWorld", 1) { it.target?.createWorld(it.getArgument(0) as WorldCreator) }
                 .function("unloadWorld", 2) {
-                    // boolean unloadWorld(@NotNull String var1, boolean var2)
-                    // boolean unloadWorld(@NotNull World var1, boolean var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.unloadWorld(var1, it.getBoolean(1))
+                        is World -> it.target?.unloadWorld(var1, it.getBoolean(1))
+                        else -> throw IllegalArgumentException("参数必须是 String 或 World 类型")
+                    }
                 }
                 .function("world", 1) {
-                    // World getWorld(@NotNull String var1)
-                    // World getWorld(@NotNull UUID var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.getWorld(var1)
+                        is UUID -> it.target?.getWorld(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 UUID 类型")
+                    }
                 }
                 .function("createWorldBorder", 0) { it.target?.createWorldBorder() }
                 .function("map", 1) { it.target?.getMap(it.getNumber(0).toInt()) }
@@ -165,9 +176,11 @@ object FnServer {
                 .function("shutdown", 0) { it.target?.shutdown() }
                 .function("broadcast", 2) { it.target?.broadcast(it.getString(0)!!, it.getString(1)!!) }
                 .function("offlinePlayer", 1) {
-                    // OfflinePlayer getOfflinePlayer(@NotNull String var1)
-                    // OfflinePlayer getOfflinePlayer(@NotNull UUID var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.getOfflinePlayer(var1)
+                        is UUID -> it.target?.getOfflinePlayer(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 UUID 类型")
+                    }
                 }
                 .function("createPlayerProfile", 2) {
                     it.target?.createPlayerProfile(
@@ -176,20 +189,26 @@ object FnServer {
                     )
                 }
                 .function("createPlayerProfile", 1) {
-                    // PlayerProfile createPlayerProfile(@NotNull UUID var1)
-                    // PlayerProfile createPlayerProfile(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is UUID -> it.target?.createPlayerProfile(var1)
+                        is String -> it.target?.createPlayerProfile(var1)
+                        else -> throw IllegalArgumentException("参数必须是 UUID 或 String 类型")
+                    }
                 }
                 .function("iPBans", 0) { it.target?.ipBans }
                 .function("banIP", 1) {
-                    // void banIP(@NotNull String var1)
-                    // void banIP(@NotNull InetAddress var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.banIP(var1)
+                        is InetAddress -> it.target?.banIP(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 InetAddress 类型")
+                    }
                 }
                 .function("unbanIP", 1) {
-                    // void unbanIP(@NotNull String var1)
-                    // void unbanIP(@NotNull InetAddress var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.unbanIP(var1)
+                        is InetAddress -> it.target?.unbanIP(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 InetAddress 类型")
+                    }
                 }
                 .function("bannedPlayers", 0) { it.target?.bannedPlayers }
                 .function("operators", 0) { it.target?.operators }
@@ -201,14 +220,28 @@ object FnServer {
                 .function("messenger", 0) { it.target?.messenger }
                 .function("helpMap", 0) { it.target?.helpMap }
                 .function("createInventory", 2) {
-                    // Inventory createInventory(@Nullable InventoryHolder var1, @NotNull InventoryType var2)
-                    // Inventory createInventory(@Nullable InventoryHolder var1, int var2)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is InventoryType -> it.target?.createInventory(it.getArgument(0) as? InventoryHolder, var2)
+                        is Int -> it.target?.createInventory(it.getArgument(0) as? InventoryHolder, var2)
+                        else -> throw IllegalArgumentException("参数2必须是 InventoryType 或 Int 类型")
+                    }
                 }
                 .function("createInventory", 3) {
-                    // Inventory createInventory(@Nullable InventoryHolder var1, @NotNull InventoryType var2, @NotNull String var3)
-                    // Inventory createInventory(@Nullable InventoryHolder var1, int var2, @NotNull String var3)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is InventoryType -> it.target?.createInventory(
+                            it.getArgument(0) as? InventoryHolder,
+                            var2,
+                            it.getString(2)!!
+                        )
+
+                        is Int -> it.target?.createInventory(
+                            it.getArgument(0) as? InventoryHolder,
+                            var2,
+                            it.getString(2)!!
+                        )
+
+                        else -> throw IllegalArgumentException("参数2必须是 InventoryType 或 Int 类型")
+                    }
                 }
                 .function("createMerchant", 1) { it.target?.createMerchant(it.getString(0)) }
                 .function("maxChainedNeighborUpdates", 0) { it.target?.maxChainedNeighborUpdates }
@@ -232,9 +265,11 @@ object FnServer {
                 .function("scoreboardCriteria", 1) { it.target?.getScoreboardCriteria(it.getString(0)!!) }
                 .function("serverIcon", 0) { it.target?.serverIcon }
                 .function("loadServerIcon", 1) {
-                    // CachedServerIcon loadServerIcon(@NotNull File var1)
-                    // CachedServerIcon loadServerIcon(@NotNull BufferedImage var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is File -> it.target?.loadServerIcon(var1)
+                        is BufferedImage -> it.target?.loadServerIcon(var1)
+                        else -> throw IllegalArgumentException("参数必须是 File 或 BufferedImage 类型")
+                    }
                 }
                 .function("setIdleTimeout", 1) { it.target?.setIdleTimeout(it.getNumber(0).toInt()) }
                 .function("idleTimeout", 0) { it.target?.idleTimeout }
@@ -260,10 +295,11 @@ object FnServer {
                 .function("advancement", 1) { it.target?.getAdvancement(it.getArgument(0) as NamespacedKey) }
                 .function("advancementIterator", 0) { it.target?.advancementIterator() }
                 .function("createBlockData", 1) {
-                    // BlockData createBlockData(@NotNull Material var1)
-                    // BlockData createBlockData(@NotNull Material var1, @Nullable Consumer<? super BlockData> var2)
-                    // BlockData createBlockData(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.createBlockData(var1)
+                        is String -> it.target?.createBlockData(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Material 或 String 类型")
+                    }
                 }
                 .function("createBlockData", 2) {
                     it.target?.createBlockData(

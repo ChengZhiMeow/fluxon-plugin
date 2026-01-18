@@ -12,9 +12,11 @@ object FnConfiguration {
             registerExtension(Configuration::class.java)
                 .function("addDefault", 2) { it.target?.addDefault(it.getString(0)!!, it.getArgument(1)) }
                 .function("addDefaults", 1) {
-                    // void addDefaults(@NotNull Map<String, Object> var1)
-                    // void addDefaults(@NotNull Configuration var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Map<*, *> -> it.target?.addDefaults(var1 as Map<String, Any>)
+                        is Configuration -> it.target?.addDefaults(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Map<String, Object> 或 Configuration 类型")
+                    }
                 }
                 .function("setDefaults", 1) { it.target?.setDefaults(it.getArgument(0) as Configuration) }
                 .function("defaults", 0) { it.target?.defaults }

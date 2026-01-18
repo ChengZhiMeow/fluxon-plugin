@@ -34,9 +34,7 @@ object FnBlockType {
                 .function("blockDataClass", 0) { it.target?.blockDataClass }
                 .function("createBlockData", 0) { it.target?.createBlockData() }
                 .function("createBlockData", 1) {
-                    // B createBlockData(@Nullable Consumer<? super B> var1)
-                    // B createBlockData(@Nullable String var1)
-                    TODO()
+                    (it.target as? BlockType.Typed<*>)?.createBlockData(it.getString(0))
                 }
         }
     }

@@ -21,9 +21,11 @@ object FnAsyncPlayerPreLoginEvent {
                 .function("setKickMessage", 1) { it.target?.setKickMessage(it.getString(0)!!) }
                 .function("allow", 0) { it.target?.allow() }
                 .function("disallow", 2) {
-                    // void disallow(@NotNull Result result, @NotNull String message)
-                    // void disallow(@NotNull PlayerPreLoginEvent.Result result, @NotNull String message)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is AsyncPlayerPreLoginEvent.Result -> it.target?.disallow(var1, it.getString(1)!!)
+                        is PlayerPreLoginEvent.Result -> it.target?.disallow(var1, it.getString(1)!!)
+                        else -> throw IllegalArgumentException("参数必须是 AsyncPlayerPreLoginEvent.Result 或 PlayerPreLoginEvent.Result 类型")
+                    }
                 }
                 .function("name", 0) { it.target?.name }
                 .function("address", 0) { it.target?.address }

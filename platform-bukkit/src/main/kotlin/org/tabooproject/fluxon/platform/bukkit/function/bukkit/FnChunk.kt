@@ -1,6 +1,8 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit
 
 import org.bukkit.Chunk
+import org.bukkit.block.Biome
+import org.bukkit.block.data.BlockData
 import org.bukkit.generator.structure.Structure
 import org.bukkit.plugin.Plugin
 import org.tabooproject.fluxon.runtime.FluxonRuntime
@@ -51,9 +53,11 @@ object FnChunk {
                 .function("inhabitedTime", 0) { it.target?.inhabitedTime }
                 .function("setInhabitedTime", 1) { it.target?.setInhabitedTime(it.getNumber(0).toLong()) }
                 .function("contains", 1) {
-                    // boolean contains(@NotNull BlockData var1)
-                    // boolean contains(@NotNull Biome var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is BlockData -> it.target?.contains(var1)
+                        is Biome -> it.target?.contains(var1)
+                        else -> throw IllegalArgumentException("参数必须是 BlockData 或 Biome 类型")
+                    }
                 }
                 .function("loadLevel", 0) { it.target?.loadLevel }
                 .function("structures", 0) { it.target?.structures }

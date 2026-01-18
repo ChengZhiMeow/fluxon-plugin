@@ -6,8 +6,11 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Entity
 import org.bukkit.entity.HumanEntity
+import org.bukkit.entity.Villager
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.Merchant
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -29,9 +32,11 @@ object FnHumanEntity {
                 .function("setEnchantmentSeed", 1) { it.target?.setEnchantmentSeed(it.getNumber(0).toInt()) }
                 .function("openInventory", 0) { it.target?.openInventory }
                 .function("openInventory", 1) {
-                    // InventoryView openInventory(@NotNull Inventory var1)
-                    // void openInventory(@NotNull InventoryView var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Inventory -> it.target?.openInventory(var1)
+                        is InventoryView -> it.target?.openInventory(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Inventory 或 InventoryView 类型")
+                    }
                 }
                 .function("openWorkbench", 2) {
                     it.target?.openWorkbench(
@@ -46,9 +51,11 @@ object FnHumanEntity {
                     )
                 }
                 .function("openMerchant", 2) {
-                    // InventoryView openMerchant(@NotNull Villager var1, boolean var2)
-                    // InventoryView openMerchant(@NotNull Merchant var1, boolean var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Villager -> it.target?.openMerchant(var1, it.getBoolean(1))
+                        is Merchant -> it.target?.openMerchant(var1, it.getBoolean(1))
+                        else -> throw IllegalArgumentException("参数必须是 Villager 或 Merchant 类型")
+                    }
                 }
                 .function("closeInventory", 0) { it.target?.closeInventory() }
                 .function("itemInHand", 0) { it.target?.itemInHand }

@@ -19,9 +19,7 @@ object FnNote {
                 .function("sharped", 0) { it.target?.sharped() }
                 .function("flattened", 0) { it.target?.flattened() }
                 .function("id", 0) {
-                    // byte getId()
-                    // byte getId()
-                    TODO()
+                    it.target?.id
                 }
                 .function("octave", 0) { it.target?.octave }
                 .function("tone", 0) { it.target?.tone }

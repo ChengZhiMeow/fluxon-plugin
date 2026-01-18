@@ -14,21 +14,27 @@ object FnSimplexNoiseGenerator {
                 .function("noise", 1) { SimplexNoiseGenerator.getNoise(it.getNumber(0).toDouble()) }
                 // static
                 .function("noise", 2) {
-                    // static double getNoise(double xin, double yin)
-                    // double noise(double xin, double yin)
-                    TODO()
+                    SimplexNoiseGenerator.getNoise(
+                        it.getNumber(0).toDouble(),
+                        it.getNumber(1).toDouble()
+                    )
                 }
                 // static
                 .function("noise", 3) {
-                    // static double getNoise(double xin, double yin, double zin)
-                    // double noise(double xin, double yin, double zin)
-                    TODO()
+                    SimplexNoiseGenerator.getNoise(
+                        it.getNumber(0).toDouble(),
+                        it.getNumber(1).toDouble(),
+                        it.getNumber(2).toDouble()
+                    )
                 }
                 // static
                 .function("noise", 4) {
-                    // static double getNoise(double x, double y, double z, double w)
-                    // double noise(double x, double y, double z, double w)
-                    TODO()
+                    SimplexNoiseGenerator.getNoise(
+                        it.getNumber(0).toDouble(),
+                        it.getNumber(1).toDouble(),
+                        it.getNumber(2).toDouble(),
+                        it.getNumber(3).toDouble()
+                    )
                 }
                 // static
                 .function("instance", 0) { SimplexNoiseGenerator.getInstance() }

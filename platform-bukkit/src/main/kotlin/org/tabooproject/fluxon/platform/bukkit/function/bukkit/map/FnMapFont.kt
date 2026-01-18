@@ -19,9 +19,7 @@ object FnMapFont {
                 .function("char", 1) { it.target?.getChar(it.getString(0)?.firstOrNull()!!) }
                 .function("width", 1) { it.target?.getWidth(it.getString(0)!!) }
                 .function("height", 0) {
-                    // int getHeight()
-                    // int getHeight()
-                    TODO()
+                    it.target?.height
                 }
                 .function("isValid", 1) { it.target?.isValid(it.getString(0)!!) }
 

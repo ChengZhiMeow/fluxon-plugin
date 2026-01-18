@@ -12,34 +12,22 @@ object FnPotionType {
         with(FluxonRuntime.getInstance()) {
             registerExtension(PotionType::class.java)
                 .function("effectType", 0) {
-                    // PotionEffectType getEffectType()
-                    // PotionEffectType getEffectType()
-                    TODO()
+                    it.target?.effectType
                 }
                 .function("potionEffects", 0) {
-                    // List<PotionEffect> getPotionEffects()
-                    // List<PotionEffect> getPotionEffects()
-                    TODO()
+                    it.target?.potionEffects
                 }
                 .function("isInstant", 0) {
-                    // boolean isInstant()
-                    // boolean isInstant()
-                    TODO()
+                    it.target?.isInstant
                 }
                 .function("isUpgradeable", 0) {
-                    // boolean isUpgradeable()
-                    // boolean isUpgradeable()
-                    TODO()
+                    it.target?.isUpgradeable
                 }
                 .function("isExtendable", 0) {
-                    // boolean isExtendable()
-                    // boolean isExtendable()
-                    TODO()
+                    it.target?.isExtendable
                 }
                 .function("maxLevel", 0) {
-                    // int getMaxLevel()
-                    // int getMaxLevel()
-                    TODO()
+                    it.target?.maxLevel
                 }
                 // static
                 .function("byEffect", 1) { PotionType.getByEffect(it.getArgument(0) as PotionEffectType) }

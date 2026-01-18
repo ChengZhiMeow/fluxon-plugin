@@ -1,7 +1,9 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.scoreboard
 
 import org.bukkit.OfflinePlayer
+import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.RenderType
 import org.bukkit.scoreboard.Scoreboard
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
@@ -19,35 +21,59 @@ object FnScoreboard {
                     )
                 }
                 .function("registerNewObjective", 3) {
-                    // Objective registerNewObjective(@NotNull String var1, @NotNull String var2, @NotNull String var3)
-                    // Objective registerNewObjective(@NotNull String var1, @NotNull Criteria var2, @NotNull String var3)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is String -> it.target?.registerNewObjective(it.getString(0)!!, var2, it.getString(2)!!)
+                        is Criteria -> it.target?.registerNewObjective(it.getString(0)!!, var2, it.getString(2)!!)
+                        else -> throw IllegalArgumentException("第二个参数必须是 String 或 Criteria 类型")
+                    }
                 }
                 .function("registerNewObjective", 4) {
-                    // Objective registerNewObjective(@NotNull String var1, @NotNull String var2, @NotNull String var3, @NotNull RenderType var4)
-                    // Objective registerNewObjective(@NotNull String var1, @NotNull Criteria var2, @NotNull String var3, @NotNull RenderType var4)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is String -> it.target?.registerNewObjective(
+                            it.getString(0)!!,
+                            var2,
+                            it.getString(2)!!,
+                            it.getArgument(3) as RenderType
+                        )
+
+                        is Criteria -> it.target?.registerNewObjective(
+                            it.getString(0)!!,
+                            var2,
+                            it.getString(2)!!,
+                            it.getArgument(3) as RenderType
+                        )
+
+                        else -> throw IllegalArgumentException("第二个参数必须是 String 或 Criteria 类型")
+                    }
                 }
                 .function("objective", 1) {
-                    // Objective getObjective(@NotNull String var1)
-                    // Objective getObjective(@NotNull DisplaySlot var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.getObjective(var1)
+                        is DisplaySlot -> it.target?.getObjective(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 DisplaySlot 类型")
+                    }
                 }
                 .function("objectivesByCriteria", 1) {
-                    // Set<Objective> getObjectivesByCriteria(@NotNull String var1)
-                    // Set<Objective> getObjectivesByCriteria(@NotNull Criteria var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.getObjectivesByCriteria(var1)
+                        is Criteria -> it.target?.getObjectivesByCriteria(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 Criteria 类型")
+                    }
                 }
                 .function("objectives", 0) { it.target?.objectives }
                 .function("scores", 1) {
-                    // Set<Score> getScores(@NotNull OfflinePlayer var1)
-                    // Set<Score> getScores(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is OfflinePlayer -> it.target?.getScores(var1)
+                        is String -> it.target?.getScores(var1)
+                        else -> throw IllegalArgumentException("参数必须是 OfflinePlayer 或 String 类型")
+                    }
                 }
                 .function("resetScores", 1) {
-                    // void resetScores(@NotNull OfflinePlayer var1)
-                    // void resetScores(@NotNull String var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is OfflinePlayer -> it.target?.resetScores(var1)
+                        is String -> it.target?.resetScores(var1)
+                        else -> throw IllegalArgumentException("参数必须是 OfflinePlayer 或 String 类型")
+                    }
                 }
                 .function("playerTeam", 1) { it.target?.getPlayerTeam(it.getArgument(0) as OfflinePlayer) }
                 .function("entryTeam", 1) { it.target?.getEntryTeam(it.getString(0)!!) }

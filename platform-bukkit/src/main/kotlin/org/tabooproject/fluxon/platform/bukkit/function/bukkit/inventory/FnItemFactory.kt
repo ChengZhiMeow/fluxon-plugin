@@ -1,6 +1,8 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.inventory
 
 import org.bukkit.Material
+import org.bukkit.World
+import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemFactory
 import org.bukkit.inventory.ItemStack
@@ -16,9 +18,11 @@ object FnItemFactory {
             registerExtension(ItemFactory::class.java)
                 .function("itemMeta", 1) { it.target?.getItemMeta(it.getArgument(0) as Material) }
                 .function("isApplicable", 2) {
-                    // boolean isApplicable(@Nullable ItemMeta var1, @Nullable ItemStack var2)
-                    // boolean isApplicable(@Nullable ItemMeta var1, @Nullable Material var2)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is ItemStack -> it.target?.isApplicable(it.getArgument(0) as ItemMeta, var2)
+                        is Material -> it.target?.isApplicable(it.getArgument(0) as ItemMeta, var2)
+                        else -> throw IllegalArgumentException("参数2必须是 ItemStack 或 Material 类型")
+                    }
                 }
                 .function("equals", 2) {
                     it.target?.equals(
@@ -27,17 +31,33 @@ object FnItemFactory {
                     )
                 }
                 .function("asMetaFor", 2) {
-                    // ItemMeta asMetaFor(@NotNull ItemMeta var1, @NotNull ItemStack var2)
-                    // ItemMeta asMetaFor(@NotNull ItemMeta var1, @NotNull Material var2)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is ItemStack -> it.target?.asMetaFor(it.getArgument(0) as ItemMeta, var2)
+                        is Material -> it.target?.asMetaFor(it.getArgument(0) as ItemMeta, var2)
+                        else -> throw IllegalArgumentException("参数2必须是 ItemStack 或 Material 类型")
+                    }
                 }
                 .function("defaultLeatherColor", 0) { it.target?.defaultLeatherColor }
                 .function("createItemStack", 1) { it.target?.createItemStack(it.getString(0)!!) }
                 .function("spawnEgg", 1) { it.target?.getSpawnEgg(it.getArgument(0) as EntityType) }
                 .function("enchantItem", 4) {
-                    // ItemStack enchantItem(@NotNull Entity var1, @NotNull ItemStack var2, int var3, boolean var4)
-                    // ItemStack enchantItem(@NotNull World var1, @NotNull ItemStack var2, int var3, boolean var4)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Entity -> it.target?.enchantItem(
+                            var1,
+                            it.getArgument(1) as ItemStack,
+                            it.getNumber(2).toInt(),
+                            it.getBoolean(3)
+                        )
+
+                        is World -> it.target?.enchantItem(
+                            var1,
+                            it.getArgument(1) as ItemStack,
+                            it.getNumber(2).toInt(),
+                            it.getBoolean(3)
+                        )
+
+                        else -> throw IllegalArgumentException("参数1必须是 Entity 或 World 类型")
+                    }
                 }
                 .function("enchantItem", 3) {
                     it.target?.enchantItem(

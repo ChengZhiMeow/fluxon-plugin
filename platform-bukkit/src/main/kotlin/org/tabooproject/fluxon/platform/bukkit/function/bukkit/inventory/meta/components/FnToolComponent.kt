@@ -1,5 +1,7 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.inventory.meta.components
 
+import org.bukkit.Material
+import org.bukkit.Tag
 import org.bukkit.inventory.meta.components.ToolComponent
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
@@ -17,20 +19,34 @@ object FnToolComponent {
                 .function("rules", 0) { it.target?.rules }
                 .function("setRules", 1) { it.target?.setRules(it.getArgument(0) as List<ToolComponent.ToolRule>) }
                 .function("addRule", 3) {
-                    // ToolRule addRule(@NotNull Material var1, @Nullable Float var2, @Nullable Boolean var3)
-                    // ToolRule addRule(@NotNull Collection<Material> var1, @Nullable Float var2, @Nullable Boolean var3)
-                    // ToolRule addRule(@NotNull Tag<Material> var1, @Nullable Float var2, @Nullable Boolean var3)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.addRule(var1, it.getNumber(1).toFloat(), it.getBoolean(2))
+                        is Collection<*> -> it.target?.addRule(
+                            var1 as Collection<Material>,
+                            it.getNumber(1).toFloat(),
+                            it.getBoolean(2)
+                        )
+
+                        is Tag<*> -> it.target?.addRule(
+                            var1 as Tag<Material>,
+                            it.getNumber(1).toFloat(),
+                            it.getBoolean(2)
+                        )
+
+                        else -> throw IllegalArgumentException("参数1必须是 Material, Collection<Material>, 或 Tag<Material> 类型")
+                    }
                 }
                 .function("removeRule", 1) { it.target?.removeRule(it.getArgument(0) as ToolComponent.ToolRule) }
 
             registerExtension(ToolComponent.ToolRule::class.java)
                 .function("blocks", 0) { it.target?.blocks }
                 .function("setBlocks", 1) {
-                    // void setBlocks(@NotNull Material var1)
-                    // void setBlocks(@NotNull Collection<Material> var1)
-                    // void setBlocks(@NotNull Tag<Material> var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> (it.target as? ToolComponent.ToolRule)?.setBlocks(var1)
+                        is Collection<*> -> (it.target as? ToolComponent.ToolRule)?.setBlocks(var1 as Collection<Material>)
+                        is Tag<*> -> (it.target as? ToolComponent.ToolRule)?.setBlocks(var1 as Tag<Material>)
+                        else -> throw IllegalArgumentException("参数1必须是 Material, Collection<Material>, 或 Tag<Material> 类型")
+                    }
                 }
                 .function("speed", 0) { it.target?.speed }
                 .function("setSpeed", 1) { it.target?.setSpeed(it.getNumber(0).toFloat()) }

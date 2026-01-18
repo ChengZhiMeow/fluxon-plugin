@@ -30,14 +30,48 @@ object FnNoiseGenerator {
                     )
                 }
                 .function("noise", 5) {
-                    // double noise(double x, int octaves, double frequency, double amplitude, boolean normalized)
-                    // double noise(double x, double y, int octaves, double frequency, double amplitude)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is Int -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            var2,
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toDouble(),
+                            it.getBoolean(4)
+                        )
+
+                        is Double -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            var2,
+                            it.getNumber(2).toInt(),
+                            it.getNumber(3).toDouble(),
+                            it.getNumber(4).toDouble()
+                        )
+
+                        else -> throw IllegalArgumentException("第二个参数必须是 Int 或 Double 类型")
+                    }
                 }
                 .function("noise", 6) {
-                    // double noise(double x, double y, int octaves, double frequency, double amplitude, boolean normalized)
-                    // double noise(double x, double y, double z, int octaves, double frequency, double amplitude)
-                    TODO()
+                    when (val var3 = it.getArgument(2)) {
+                        is Int -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            it.getNumber(1).toDouble(),
+                            var3,
+                            it.getNumber(3).toDouble(),
+                            it.getNumber(4).toDouble(),
+                            it.getBoolean(5)
+                        )
+
+                        is Double -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            it.getNumber(1).toDouble(),
+                            var3,
+                            it.getNumber(3).toInt(),
+                            it.getNumber(4).toDouble(),
+                            it.getNumber(5).toDouble()
+                        )
+
+                        else -> throw IllegalArgumentException("第三个参数必须是 Int 或 Double 类型")
+                    }
                 }
                 .function("noise", 7) {
                     it.target?.noise(

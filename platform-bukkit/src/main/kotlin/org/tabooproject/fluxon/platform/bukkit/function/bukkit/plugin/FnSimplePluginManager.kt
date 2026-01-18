@@ -12,6 +12,7 @@ import org.bukkit.plugin.SimplePluginManager
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.io.File
 
 object FnSimplePluginManager {
     @Awake(LifeCycle.INIT)
@@ -19,14 +20,18 @@ object FnSimplePluginManager {
         with(FluxonRuntime.getInstance()) {
             registerExtension(SimplePluginManager::class.java)
                 .function("loadPlugins", 1) {
-                    // Plugin[] loadPlugins(@NotNull File directory)
-                    // Plugin[] loadPlugins(@NotNull File[] files)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is File -> it.target?.loadPlugins(var1)
+                        is Array<*> -> it.target?.loadPlugins(var1 as Array<File>)
+                        else -> throw IllegalArgumentException("参数必须是 File 或 File[] 类型")
+                    }
                 }
                 .function("isPluginEnabled", 1) {
-                    // boolean isPluginEnabled(@NotNull String name)
-                    // boolean isPluginEnabled(@Nullable Plugin plugin)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is String -> it.target?.isPluginEnabled(var1)
+                        is Plugin -> it.target?.isPluginEnabled(var1)
+                        else -> throw IllegalArgumentException("参数必须是 String 或 Plugin 类型")
+                    }
                 }
                 .function("enablePlugin", 1) { it.target?.enablePlugin(it.getArgument(0) as Plugin) }
                 .function("disablePlugins", 0) { it.target?.disablePlugins() }
@@ -67,9 +72,11 @@ object FnSimplePluginManager {
                 }
                 .function("defaultPermissions", 1) { it.target?.getDefaultPermissions(it.getBoolean(0)) }
                 .function("removePermission", 1) {
-                    // void removePermission(@NotNull Permission perm)
-                    // void removePermission(@NotNull String name)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Permission -> it.target?.removePermission(var1)
+                        is String -> it.target?.removePermission(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Permission 或 String 类型")
+                    }
                 }
                 .function("recalculatePermissionDefaults", 1) {
                     it.target?.recalculatePermissionDefaults(

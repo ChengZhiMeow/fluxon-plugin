@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.io.File
 
 object FnFileConfiguration {
     @Awake(LifeCycle.INIT)
@@ -13,9 +14,11 @@ object FnFileConfiguration {
                 .function("save", 1) { it.target?.save(it.getString(0)!!) }
                 .function("saveToString", 0) { it.target?.saveToString() }
                 .function("load", 1) {
-                    // void load(@NotNull File file)
-                    // void load(@NotNull String file)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is File -> it.target?.load(var1)
+                        is String -> it.target?.load(var1)
+                        else -> throw IllegalArgumentException("参数必须是 File 或 String 类型")
+                    }
                 }
                 .function("loadFromString", 1) { it.target?.loadFromString(it.getString(0)!!) }
         }

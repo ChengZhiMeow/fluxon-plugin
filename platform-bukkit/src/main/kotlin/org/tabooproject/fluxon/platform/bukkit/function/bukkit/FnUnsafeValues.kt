@@ -3,7 +3,10 @@ package org.tabooproject.fluxon.platform.bukkit.function.bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.UnsafeValues
+import org.bukkit.attribute.Attribute
+import org.bukkit.entity.EntityType
 import org.bukkit.inventory.ItemStack
+import org.bukkit.material.MaterialData
 import org.bukkit.plugin.PluginDescriptionFile
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
@@ -16,14 +19,18 @@ object FnUnsafeValues {
             registerExtension(UnsafeValues::class.java)
                 .function("toLegacy", 1) { it.target?.toLegacy(it.getArgument(0) as Material) }
                 .function("fromLegacy", 1) {
-                    // Material fromLegacy(Material var1)
-                    // Material fromLegacy(MaterialData var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.fromLegacy(var1)
+                        is MaterialData -> it.target?.fromLegacy(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Material 或 MaterialData 类型")
+                    }
                 }
                 .function("fromLegacy", 2) {
-                    // Material fromLegacy(MaterialData var1, boolean var2)
-                    // BlockData fromLegacy(Material var1, byte var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is MaterialData -> it.target?.fromLegacy(var1, it.getBoolean(1))
+                        is Material -> it.target?.fromLegacy(var1, it.getNumber(1).toByte())
+                        else -> throw IllegalArgumentException("参数1必须是 MaterialData 或 Material 类型")
+                    }
                 }
                 .function("material", 2) { it.target?.getMaterial(it.getString(0), it.getNumber(1).toInt()) }
                 .function("dataVersion", 0) { it.target?.dataVersion }
@@ -52,10 +59,12 @@ object FnUnsafeValues {
                 .function("blockTranslationKey", 1) { it.target?.getBlockTranslationKey(it.getArgument(0) as Material) }
                 .function("itemTranslationKey", 1) { it.target?.getItemTranslationKey(it.getArgument(0) as Material) }
                 .function("translationKey", 1) {
-                    // String getTranslationKey(EntityType var1)
-                    // String getTranslationKey(ItemStack var1)
-                    // String getTranslationKey(Attribute var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is EntityType -> it.target?.getTranslationKey(var1)
+                        is ItemStack -> it.target?.getTranslationKey(var1)
+                        is Attribute -> it.target?.getTranslationKey(var1)
+                        else -> throw IllegalArgumentException("参数必须是 EntityType, ItemStack, 或 Attribute 类型")
+                    }
                 }
                 .function("featureFlag", 1) { it.target?.getFeatureFlag(it.getArgument(0) as NamespacedKey) }
         }

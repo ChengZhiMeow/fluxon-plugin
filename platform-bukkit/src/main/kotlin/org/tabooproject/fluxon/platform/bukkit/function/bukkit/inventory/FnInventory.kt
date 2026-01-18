@@ -1,5 +1,6 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.inventory
 
+import org.bukkit.Material
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.tabooproject.fluxon.runtime.FluxonRuntime
@@ -24,14 +25,18 @@ object FnInventory {
                     1
                 ) { it.target?.setStorageContents(it.getArgument(0) as Array<ItemStack>) }
                 .function("contains", 1) {
-                    // boolean contains(@NotNull Material var1)
-                    // boolean contains(@Nullable ItemStack var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.contains(var1)
+                        is ItemStack -> it.target?.contains(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Material 或 ItemStack 类型")
+                    }
                 }
                 .function("contains", 2) {
-                    // boolean contains(@NotNull Material var1, int var2)
-                    // boolean contains(@Nullable ItemStack var1, int var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.contains(var1, it.getNumber(1).toInt())
+                        is ItemStack -> it.target?.contains(var1, it.getNumber(1).toInt())
+                        else -> throw IllegalArgumentException("参数必须是 Material 或 ItemStack 类型")
+                    }
                 }
                 .function("containsAtLeast", 2) {
                     it.target?.containsAtLeast(
@@ -40,16 +45,20 @@ object FnInventory {
                     )
                 }
                 .function("first", 1) {
-                    // int first(@NotNull Material var1)
-                    // int first(@NotNull ItemStack var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.first(var1)
+                        is ItemStack -> it.target?.first(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Material 或 ItemStack 类型")
+                    }
                 }
                 .function("firstEmpty", 0) { it.target?.firstEmpty() }
                 .function("isEmpty", 0) { it.target?.isEmpty }
                 .function("remove", 1) {
-                    // void remove(@NotNull Material var1)
-                    // void remove(@NotNull ItemStack var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Material -> it.target?.remove(var1)
+                        is ItemStack -> it.target?.remove(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Material 或 ItemStack 类型")
+                    }
                 }
                 .function("clear", 1) { it.target?.clear(it.getNumber(0).toInt()) }
                 .function("clear", 0) { it.target?.clear() }

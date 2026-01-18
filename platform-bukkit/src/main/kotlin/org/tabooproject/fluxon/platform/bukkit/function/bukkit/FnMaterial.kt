@@ -18,9 +18,7 @@ object FnMaterial {
                 .function("maxStackSize", 0) { it.target?.maxStackSize }
                 .function("maxDurability", 0) { it.target?.maxDurability }
                 .function("createBlockData", 0) {
-                    // BlockData createBlockData()
-                    // BlockData createBlockData(@Nullable Consumer<? super BlockData> consumer)
-                    TODO()
+                    it.target?.createBlockData()
                 }
                 .function("createBlockData", 1) { it.target?.createBlockData(it.getString(0)) }
                 .function("newData", 1) { it.target?.getNewData(it.getNumber(0).toByte()) }

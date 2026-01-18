@@ -1,10 +1,13 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.generator
 
 import org.bukkit.HeightMap
+import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Biome
+import org.bukkit.block.data.BlockData
 import org.bukkit.generator.ChunkGenerator
 import org.bukkit.generator.WorldInfo
+import org.bukkit.material.MaterialData
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -154,21 +157,68 @@ object FnChunkGenerator {
                 .function("minHeight", 0) { it.target?.minHeight }
                 .function("maxHeight", 0) { it.target?.maxHeight }
                 .function("biome", 3) {
-                    // Biome getBiome(int var1, int var2, int var3)
-                    // Biome getBiome(int var1, int var2, int var3)
-                    TODO()
+                    it.target?.getBiome(it.getNumber(0).toInt(), it.getNumber(1).toInt(), it.getNumber(2).toInt())
                 }
                 .function("setBlock", 4) {
-                    // void setBlock(int var1, int var2, int var3, @NotNull Material var4)
-                    // void setBlock(int var1, int var2, int var3, @NotNull MaterialData var4)
-                    // void setBlock(int var1, int var2, int var3, @NotNull BlockData var4)
-                    TODO()
+                    when (val var4 = it.getArgument(3)) {
+                        is Material -> it.target?.setBlock(
+                            it.getNumber(0).toInt(),
+                            it.getNumber(1).toInt(),
+                            it.getNumber(2).toInt(),
+                            var4
+                        )
+
+                        is MaterialData -> it.target?.setBlock(
+                            it.getNumber(0).toInt(),
+                            it.getNumber(1).toInt(),
+                            it.getNumber(2).toInt(),
+                            var4
+                        )
+
+                        is BlockData -> it.target?.setBlock(
+                            it.getNumber(0).toInt(),
+                            it.getNumber(1).toInt(),
+                            it.getNumber(2).toInt(),
+                            var4
+                        )
+
+                        else -> throw IllegalArgumentException("参数4必须是 Material, MaterialData, 或 BlockData 类型")
+                    }
                 }
                 .function("setRegion", 7) {
-                    // void setRegion(int var1, int var2, int var3, int var4, int var5, int var6, @NotNull Material var7)
-                    // void setRegion(int var1, int var2, int var3, int var4, int var5, int var6, @NotNull MaterialData var7)
-                    // void setRegion(int var1, int var2, int var3, int var4, int var5, int var6, @NotNull BlockData var7)
-                    TODO()
+                    when (val var7 = it.getArgument(6)) {
+                        is Material -> it.target?.setRegion(
+                            it.getNumber(0).toInt(),
+                            it.getNumber(1).toInt(),
+                            it.getNumber(2).toInt(),
+                            it.getNumber(3).toInt(),
+                            it.getNumber(4).toInt(),
+                            it.getNumber(5).toInt(),
+                            var7
+                        )
+
+                        is MaterialData -> it.target?.setRegion(
+                            it.getNumber(0).toInt(),
+                            it.getNumber(1).toInt(),
+                            it.getNumber(2).toInt(),
+                            it.getNumber(3).toInt(),
+                            it.getNumber(4).toInt(),
+                            it.getNumber(5).toInt(),
+                            var7
+                        )
+
+                        is BlockData -> it.target?.setRegion(
+                            it.getNumber(0).toInt(),
+                            it.getNumber(1).toInt(),
+                            it.getNumber(2).toInt(),
+                            it.getNumber(3).toInt(),
+                            it.getNumber(4).toInt(),
+                            it.getNumber(5).toInt(),
+                            var7
+                        )
+
+                        else -> throw IllegalArgumentException("参数7必须是 Material, MaterialData, 或 BlockData 类型")
+                    }
                 }
                 .function("type", 3) {
                     it.target?.getType(

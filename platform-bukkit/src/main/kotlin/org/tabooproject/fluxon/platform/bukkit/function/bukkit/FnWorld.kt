@@ -2,9 +2,14 @@ package org.tabooproject.fluxon.platform.bukkit.function.bukkit
 
 import org.bukkit.*
 import org.bukkit.block.Biome
+import org.bukkit.block.Block
+import org.bukkit.block.data.BlockData
 import org.bukkit.entity.Entity
 import org.bukkit.entity.SpawnCategory
 import org.bukkit.generator.structure.Structure
+import org.bukkit.generator.structure.StructureType
+import org.bukkit.inventory.ItemStack
+import org.bukkit.material.MaterialData
 import org.bukkit.plugin.Plugin
 import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
@@ -26,9 +31,11 @@ object FnWorld {
                 }
                 .function("blockAt", 1) { it.target?.getBlockAt(it.getArgument(0) as Location) }
                 .function("highestBlockAt", 2) {
-                    // Block getHighestBlockAt(int var1, int var2)
-                    // Block getHighestBlockAt(@NotNull Location var1, @NotNull HeightMap var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Int -> it.target?.getHighestBlockAt(var1, it.getNumber(1).toInt())
+                        is Location -> it.target?.getHighestBlockAt(var1, it.getArgument(1) as HeightMap)
+                        else -> throw IllegalArgumentException("参数必须是 Int 或 Location 类型")
+                    }
                 }
                 .function("highestBlockAt", 1) { it.target?.getHighestBlockAt(it.getArgument(0) as Location) }
                 .function("highestBlockAt", 3) {
@@ -47,9 +54,11 @@ object FnWorld {
                     )
                 }
                 .function("chunkAt", 1) {
-                    // Chunk getChunkAt(@NotNull Location var1)
-                    // Chunk getChunkAt(@NotNull Block var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> it.target?.getChunkAt(var1)
+                        is Block -> it.target?.getChunkAt(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Location 或 Block 类型")
+                    }
                 }
                 .function("isChunkLoaded", 1) { it.target?.isChunkLoaded(it.getArgument(0) as Chunk) }
                 .function("loadedChunks", 0) { it.target?.loadedChunks }
@@ -157,14 +166,10 @@ object FnWorld {
                     1
                 ) { it.target?.getIntersectingChunks(it.getArgument(0) as BoundingBox) }
                 .function("dropItem", 2) {
-                    // Item dropItem(@NotNull Location var1, @NotNull ItemStack var2)
-                    // Item dropItem(@NotNull Location var1, @NotNull ItemStack var2, @Nullable Consumer<? super Item> var3)
-                    TODO()
+                    it.target?.dropItem(it.getArgument(0) as Location, it.getArgument(1) as ItemStack)
                 }
                 .function("dropItemNaturally", 2) {
-                    // Item dropItemNaturally(@NotNull Location var1, @NotNull ItemStack var2)
-                    // Item dropItemNaturally(@NotNull Location var1, @NotNull ItemStack var2, @Nullable Consumer<? super Item> var3)
-                    TODO()
+                    it.target?.dropItemNaturally(it.getArgument(0) as Location, it.getArgument(1) as ItemStack)
                 }
                 .function("spawnArrow", 4) {
                     it.target?.spawnArrow(
@@ -197,24 +202,30 @@ object FnWorld {
                 .function("entitiesByClasses", 0) { it.target?.getEntitiesByClasses() }
                 .function("players", 0) { it.target?.players }
                 .function("nearbyEntities", 4) {
-                    // Collection<Entity> getNearbyEntities(@NotNull Location var1, double var2, double var4, double var6)
-                    // Collection<Entity> getNearbyEntities(@NotNull Location var1, double var2, double var4, double var6, @Nullable Predicate<? super Entity> var8)
-                    TODO()
+                    it.target?.getNearbyEntities(
+                        it.getArgument(0) as Location,
+                        it.getNumber(1).toDouble(),
+                        it.getNumber(2).toDouble(),
+                        it.getNumber(3).toDouble()
+                    )
                 }
                 .function("nearbyEntities", 1) {
-                    // Collection<Entity> getNearbyEntities(@NotNull BoundingBox var1)
-                    // Collection<Entity> getNearbyEntities(@NotNull BoundingBox var1, @Nullable Predicate<? super Entity> var2)
-                    TODO()
+                    it.target?.getNearbyEntities(it.getArgument(0) as BoundingBox)
                 }
                 .function("rayTraceEntities", 3) {
-                    // RayTraceResult rayTraceEntities(@NotNull Location var1, @NotNull Vector var2, double var3)
-                    // RayTraceResult rayTraceEntities(@NotNull Location var1, @NotNull Vector var2, double var3, @Nullable Predicate<? super Entity> var5)
-                    TODO()
+                    it.target?.rayTraceEntities(
+                        it.getArgument(0) as Location,
+                        it.getArgument(1) as Vector,
+                        it.getNumber(2).toDouble()
+                    )
                 }
                 .function("rayTraceEntities", 4) {
-                    // RayTraceResult rayTraceEntities(@NotNull Location var1, @NotNull Vector var2, double var3, double var5)
-                    // RayTraceResult rayTraceEntities(@NotNull Location var1, @NotNull Vector var2, double var3, double var5, @Nullable Predicate<? super Entity> var7)
-                    TODO()
+                    it.target?.rayTraceEntities(
+                        it.getArgument(0) as Location,
+                        it.getArgument(1) as Vector,
+                        it.getNumber(2).toDouble(),
+                        it.getNumber(3).toDouble()
+                    )
                 }
                 .function("rayTraceBlocks", 3) {
                     it.target?.rayTraceBlocks(
@@ -285,14 +296,44 @@ object FnWorld {
                 .function("setClearWeatherDuration", 1) { it.target?.setClearWeatherDuration(it.getNumber(0).toInt()) }
                 .function("clearWeatherDuration", 0) { it.target?.clearWeatherDuration }
                 .function("createExplosion", 4) {
-                    // boolean createExplosion(double var1, double var3, double var5, float var7)
-                    // boolean createExplosion(@NotNull Location var1, float var2, boolean var3, boolean var4)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Double -> it.target?.createExplosion(
+                            var1,
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toFloat()
+                        )
+
+                        is Location -> it.target?.createExplosion(
+                            var1,
+                            it.getNumber(1).toFloat(),
+                            it.getBoolean(2),
+                            it.getBoolean(3)
+                        )
+
+                        else -> throw IllegalArgumentException("参数必须是 Double 或 Location 类型")
+                    }
                 }
                 .function("createExplosion", 5) {
-                    // boolean createExplosion(double var1, double var3, double var5, float var7, boolean var8)
-                    // boolean createExplosion(@NotNull Location var1, float var2, boolean var3, boolean var4, @Nullable Entity var5)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Double -> it.target?.createExplosion(
+                            var1,
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toFloat(),
+                            it.getBoolean(4)
+                        )
+
+                        is Location -> it.target?.createExplosion(
+                            var1,
+                            it.getNumber(1).toFloat(),
+                            it.getBoolean(2),
+                            it.getBoolean(3),
+                            it.getArgument(4) as Entity?
+                        )
+
+                        else -> throw IllegalArgumentException("参数必须是 Double 或 Location 类型")
+                    }
                 }
                 .function("createExplosion", 6) {
                     it.target?.createExplosion(
@@ -335,9 +376,11 @@ object FnWorld {
                 .function("save", 0) { it.target?.save() }
                 .function("populators", 0) { it.target?.populators }
                 .function("spawnFallingBlock", 2) {
-                    // FallingBlock spawnFallingBlock(@NotNull Location var1, @NotNull MaterialData var2)
-                    // FallingBlock spawnFallingBlock(@NotNull Location var1, @NotNull BlockData var2)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is MaterialData -> it.target?.spawnFallingBlock(it.getArgument(0) as Location, var2)
+                        is BlockData -> it.target?.spawnFallingBlock(it.getArgument(0) as Location, var2)
+                        else -> throw IllegalArgumentException("参数必须是 MaterialData 或 BlockData 类型")
+                    }
                 }
                 .function("spawnFallingBlock", 3) {
                     it.target?.spawnFallingBlock(
@@ -502,25 +545,139 @@ object FnWorld {
                     )
                 }
                 .function("playSound", 4) {
-                    // void playSound(@NotNull Location var1, @NotNull Sound var2, float var3, float var4)
-                    // void playSound(@NotNull Location var1, @NotNull String var2, float var3, float var4)
-                    // void playSound(@NotNull Entity var1, @NotNull Sound var2, float var3, float var4)
-                    // void playSound(@NotNull Entity var1, @NotNull String var2, float var3, float var4)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("第二个参数必须是 Sound 或 String 类型")
+                        }
+
+                        is Entity -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getNumber(2).toFloat(),
+                                it.getNumber(3).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("第二个参数必须是 Sound 或 String 类型")
+                        }
+
+                        else -> throw IllegalArgumentException("第一个参数必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("playSound", 5) {
-                    // void playSound(@NotNull Location var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5)
-                    // void playSound(@NotNull Location var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5)
-                    // void playSound(@NotNull Entity var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5)
-                    // void playSound(@NotNull Entity var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("第二个参数必须是 Sound 或 String 类型")
+                        }
+
+                        is Entity -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat()
+                            )
+
+                            else -> throw IllegalArgumentException("第二个参数必须是 Sound 或 String 类型")
+                        }
+
+                        else -> throw IllegalArgumentException("第一个参数必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("playSound", 6) {
-                    // void playSound(@NotNull Location var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    // void playSound(@NotNull Location var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    // void playSound(@NotNull Entity var1, @NotNull Sound var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    // void playSound(@NotNull Entity var1, @NotNull String var2, @NotNull SoundCategory var3, float var4, float var5, long var6)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Location -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            else -> throw IllegalArgumentException("第二个参数必须是 Sound 或 String 类型")
+                        }
+
+                        is Entity -> when (val var2 = it.getArgument(1)) {
+                            is Sound -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            is String -> it.target?.playSound(
+                                var1,
+                                var2,
+                                it.getArgument(2) as SoundCategory,
+                                it.getNumber(3).toFloat(),
+                                it.getNumber(4).toFloat(),
+                                it.getNumber(5).toLong()
+                            )
+
+                            else -> throw IllegalArgumentException("第二个参数必须是 Sound 或 String 类型")
+                        }
+
+                        else -> throw IllegalArgumentException("第一个参数必须是 Location 或 Entity 类型")
+                    }
                 }
                 .function("gameRules", 0) { it.target?.gameRules }
                 .function("gameRuleValue", 1) { it.target?.getGameRuleValue(it.getString(0)) }
@@ -590,10 +747,23 @@ object FnWorld {
                     )
                 }
                 .function("locateNearestStructure", 4) {
-                    // Location locateNearestStructure(@NotNull Location var1, @NotNull StructureType var2, int var3, boolean var4)
-                    // StructureSearchResult locateNearestStructure(@NotNull Location var1, @NotNull org.bukkit.generator.structure.StructureType var2, int var3, boolean var4)
-                    // StructureSearchResult locateNearestStructure(@NotNull Location var1, @NotNull Structure var2, int var3, boolean var4)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is StructureType -> it.target?.locateNearestStructure(
+                            it.getArgument(0) as Location,
+                            var2,
+                            it.getNumber(2).toInt(),
+                            it.getBoolean(3)
+                        )
+
+                        is Structure -> it.target?.locateNearestStructure(
+                            it.getArgument(0) as Location,
+                            var2,
+                            it.getNumber(2).toInt(),
+                            it.getBoolean(3)
+                        )
+
+                        else -> throw IllegalArgumentException("第二个参数必须是 StructureType 或 Structure 类型")
+                    }
                 }
                 .function("spigot", 0) { it.target?.spigot() }
                 .function("locateNearestBiome", 2) {

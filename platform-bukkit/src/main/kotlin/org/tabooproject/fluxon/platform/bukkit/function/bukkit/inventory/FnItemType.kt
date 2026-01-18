@@ -13,14 +13,10 @@ object FnItemType {
             registerExtension(ItemType::class.java)
                 .function("typed", 0) { it.target?.typed() }
                 .function("createItemStack", 0) {
-                    // ItemStack createItemStack()
-                    // ItemStack createItemStack(@Nullable Consumer<? super M> var1)
-                    TODO()
+                    it.target?.createItemStack()
                 }
                 .function("createItemStack", 1) {
-                    // ItemStack createItemStack(int var1)
-                    // ItemStack createItemStack(int var1, @Nullable Consumer<? super M> var2)
-                    TODO()
+                    it.target?.createItemStack(it.getNumber(0).toInt())
                 }
                 .function("hasBlockType", 0) { it.target?.hasBlockType() }
                 .function("blockType", 0) { it.target?.blockType }

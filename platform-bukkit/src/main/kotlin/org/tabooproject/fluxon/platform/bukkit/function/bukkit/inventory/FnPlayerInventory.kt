@@ -19,9 +19,11 @@ object FnPlayerInventory {
                 .function("leggings", 0) { it.target?.leggings }
                 .function("boots", 0) { it.target?.boots }
                 .function("setItem", 2) {
-                    // void setItem(int var1, @Nullable ItemStack var2)
-                    // void setItem(@NotNull EquipmentSlot var1, @Nullable ItemStack var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Int -> it.target?.setItem(var1, it.getArgument(1) as ItemStack)
+                        is EquipmentSlot -> it.target?.setItem(var1, it.getArgument(1) as ItemStack)
+                        else -> throw IllegalArgumentException("参数1必须是 Int 或 EquipmentSlot 类型")
+                    }
                 }
                 .function("item", 1) { it.target?.getItem(it.getArgument(0) as EquipmentSlot) }
                 .function("setArmorContents", 1) { it.target?.setArmorContents(it.getArgument(0) as Array<ItemStack>) }

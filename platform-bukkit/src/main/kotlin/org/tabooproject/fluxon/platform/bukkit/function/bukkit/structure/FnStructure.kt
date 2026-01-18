@@ -45,9 +45,11 @@ object FnStructure {
                     )
                 }
                 .function("fill", 3) {
-                    // void fill(@NotNull Location var1, @NotNull Location var2, boolean var3)
-                    // void fill(@NotNull Location var1, @NotNull BlockVector var2, boolean var3)
-                    TODO()
+                    when (val var2 = it.getArgument(1)) {
+                        is Location -> it.target?.fill(it.getArgument(0) as Location, var2, it.getBoolean(2))
+                        is BlockVector -> it.target?.fill(it.getArgument(0) as Location, var2, it.getBoolean(2))
+                        else -> throw IllegalArgumentException("第二个参数必须是 Location 或 BlockVector 类型")
+                    }
                 }
         }
     }

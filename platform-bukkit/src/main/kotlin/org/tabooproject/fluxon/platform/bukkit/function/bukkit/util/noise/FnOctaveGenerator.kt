@@ -26,14 +26,44 @@ object FnOctaveGenerator {
                     )
                 }
                 .function("noise", 4) {
-                    // double noise(double x, double frequency, double amplitude, boolean normalized)
-                    // double noise(double x, double y, double frequency, double amplitude)
-                    TODO()
+                    when (val var4 = it.getArgument(3)) {
+                        is Boolean -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            var4
+                        )
+
+                        is Double -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            var4
+                        )
+
+                        else -> throw IllegalArgumentException("第四个参数必须是 Boolean 或 Double 类型")
+                    }
                 }
                 .function("noise", 5) {
-                    // double noise(double x, double y, double frequency, double amplitude, boolean normalized)
-                    // double noise(double x, double y, double z, double frequency, double amplitude)
-                    TODO()
+                    when (val var5 = it.getArgument(4)) {
+                        is Boolean -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toDouble(),
+                            var5
+                        )
+
+                        is Double -> it.target?.noise(
+                            it.getNumber(0).toDouble(),
+                            it.getNumber(1).toDouble(),
+                            it.getNumber(2).toDouble(),
+                            it.getNumber(3).toDouble(),
+                            var5
+                        )
+
+                        else -> throw IllegalArgumentException("第五个参数必须是 Boolean 或 Double 类型")
+                    }
                 }
                 .function("noise", 6) {
                     it.target?.noise(

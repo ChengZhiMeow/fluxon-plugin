@@ -25,9 +25,7 @@ object FnMapPalette {
                 }
                 // static
                 .function("matchColor", 1) {
-                    // static byte matchColor(@NotNull Color color)
-                    // byte matchColor(@NotNull Color var1)
-                    TODO()
+                    MapPalette.matchColor(it.getArgument(0) as java.awt.Color)
                 }
                 // static
                 .function("color", 1) { MapPalette.getColor(it.getNumber(0).toByte()) }

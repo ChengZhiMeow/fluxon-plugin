@@ -13,9 +13,7 @@ object FnServicesManager {
             registerExtension(ServicesManager::class.java)
                 .function("unregisterAll", 1) { it.target?.unregisterAll(it.getArgument(0) as Plugin) }
                 .function("unregister", 1) {
-                    // void unregister(@NotNull Class<?> var1, @NotNull Object var2)
-                    // void unregister(@NotNull Object var1)
-                    TODO()
+                    it.target?.unregister(it.getArgument(0)!!)
                 }
         }
     }

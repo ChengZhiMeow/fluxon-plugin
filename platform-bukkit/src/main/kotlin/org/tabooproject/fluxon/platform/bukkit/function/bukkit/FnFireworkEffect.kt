@@ -32,15 +32,11 @@ object FnFireworkEffect {
                 .function("trail", 1) { it.target?.trail(it.getBoolean(0)) }
                 .function("withColor", 1) { it.target?.withColor(it.getArgument(0) as Color) }
                 .function("withColor", 0) {
-                    // Builder withColor(Color ... colors)
-                    // Builder withColor(@NotNull Iterable<?> colors)
-                    TODO()
+                    it.target?.withColor(it.arguments.map { arg -> arg as Color })
                 }
                 .function("withFade", 1) { it.target?.withFade(it.getArgument(0) as Color) }
                 .function("withFade", 0) {
-                    // Builder withFade(Color ... colors)
-                    // Builder withFade(@NotNull Iterable<?> colors)
-                    TODO()
+                    it.target?.withFade(it.arguments.map { arg -> arg as Color })
                 }
                 .function("build", 0) { it.target?.build() }
         }

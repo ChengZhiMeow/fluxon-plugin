@@ -3,6 +3,7 @@ package org.tabooproject.fluxon.platform.bukkit.function.bukkit.inventory.meta
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemRarity
 import org.bukkit.inventory.meta.ItemMeta
@@ -86,9 +87,11 @@ object FnItemMeta {
 //                    1
 //                ) { it.target?.setAttributeModifiers(it.getArgument(0) as Multimap<Attribute, AttributeModifier>) }
                 .function("removeAttributeModifier", 1) {
-                    // boolean removeAttributeModifier(@NotNull Attribute var1)
-                    // boolean removeAttributeModifier(@NotNull EquipmentSlot var1)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Attribute -> it.target?.removeAttributeModifier(var1)
+                        is EquipmentSlot -> it.target?.removeAttributeModifier(var1)
+                        else -> throw IllegalArgumentException("参数必须是 Attribute 或 EquipmentSlot 类型")
+                    }
                 }
                 .function(
                     "removeAttributeModifier",

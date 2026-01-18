@@ -91,10 +91,11 @@ object FnRegionAccessor {
                     )
                 }
                 .function("generateTree", 3) {
-                    // boolean generateTree(@NotNull Location var1, @NotNull Random var2, @NotNull TreeType var3)
-                    // boolean generateTree(@NotNull Location var1, @NotNull Random var2, @NotNull TreeType var3, @Nullable Consumer<? super BlockState> var4)
-                    // boolean generateTree(@NotNull Location var1, @NotNull Random var2, @NotNull TreeType var3, @Nullable Predicate<? super BlockState> var4)
-                    TODO()
+                    it.target?.generateTree(
+                        it.getArgument(0) as Location,
+                        it.getArgument(1) as java.util.Random,
+                        it.getArgument(2) as org.bukkit.TreeType
+                    )
                 }
                 .function("spawnEntity", 2) {
                     it.target?.spawnEntity(
@@ -113,9 +114,11 @@ object FnRegionAccessor {
                 .function("livingEntities", 0) { it.target?.livingEntities }
                 .function("entitiesByClasses", 0) { it.target?.getEntitiesByClasses() }
                 .function("highestBlockYAt", 2) {
-                    // int getHighestBlockYAt(int var1, int var2)
-                    // int getHighestBlockYAt(@NotNull Location var1, @NotNull HeightMap var2)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is Int -> it.target?.getHighestBlockYAt(var1, it.getNumber(1).toInt())
+                        is Location -> it.target?.getHighestBlockYAt(var1, it.getArgument(1) as HeightMap)
+                        else -> throw IllegalArgumentException("参数1必须是 Int 或 Location 类型")
+                    }
                 }
                 .function("highestBlockYAt", 1) { it.target?.getHighestBlockYAt(it.getArgument(0) as Location) }
                 .function("highestBlockYAt", 3) {

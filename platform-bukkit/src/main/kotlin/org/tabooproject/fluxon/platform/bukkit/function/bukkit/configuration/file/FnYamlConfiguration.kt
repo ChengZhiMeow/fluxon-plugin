@@ -4,6 +4,8 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.io.File
+import java.io.Reader
 
 object FnYamlConfiguration {
     @Awake(LifeCycle.INIT)
@@ -14,9 +16,11 @@ object FnYamlConfiguration {
                 .function("loadFromString", 1) { it.target?.loadFromString(it.getString(0)!!) }
                 // static
                 .function("loadConfiguration", 1) {
-                    // static YamlConfiguration loadConfiguration(@NotNull File file)
-                    // static YamlConfiguration loadConfiguration(@NotNull Reader reader)
-                    TODO()
+                    when (val var1 = it.getArgument(0)) {
+                        is File -> YamlConfiguration.loadConfiguration(var1)
+                        is Reader -> YamlConfiguration.loadConfiguration(var1)
+                        else -> throw IllegalArgumentException("参数必须是 File 或 Reader 类型")
+                    }
                 }
         }
     }

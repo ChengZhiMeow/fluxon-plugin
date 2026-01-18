@@ -14,20 +14,20 @@ object FnScoreboard {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(Scoreboard::class.java)
-                .function("registerNewObjective", 2) {
+                .syncFunction("registerNewObjective", 2) {
                     it.target?.registerNewObjective(
                         it.getString(0)!!,
                         it.getString(1)!!
                     )
                 }
-                .function("registerNewObjective", 3) {
+                .syncFunction("registerNewObjective", 3) {
                     when (val var2 = it.getArgument(1)) {
                         is String -> it.target?.registerNewObjective(it.getString(0)!!, var2, it.getString(2)!!)
                         is Criteria -> it.target?.registerNewObjective(it.getString(0)!!, var2, it.getString(2)!!)
                         else -> throw IllegalArgumentException("第二个参数必须是 String 或 Criteria 类型")
                     }
                 }
-                .function("registerNewObjective", 4) {
+                .syncFunction("registerNewObjective", 4) {
                     when (val var2 = it.getArgument(1)) {
                         is String -> it.target?.registerNewObjective(
                             it.getString(0)!!,

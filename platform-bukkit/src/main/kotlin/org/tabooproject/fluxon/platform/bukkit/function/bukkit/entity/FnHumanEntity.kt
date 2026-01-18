@@ -30,27 +30,27 @@ object FnHumanEntity {
                 ) { it.target?.setWindowProperty(it.getArgument(0) as InventoryView.Property, it.getNumber(1).toInt()) }
                 .function("enchantmentSeed", 0) { it.target?.enchantmentSeed }
                 .function("setEnchantmentSeed", 1) { it.target?.setEnchantmentSeed(it.getNumber(0).toInt()) }
-                .function("openInventory", 0) { it.target?.openInventory }
-                .function("openInventory", 1) {
+                .syncFunction("openInventory", 0) { it.target?.openInventory }
+                .syncFunction("openInventory", 1) {
                     when (val var1 = it.getArgument(0)) {
                         is Inventory -> it.target?.openInventory(var1)
                         is InventoryView -> it.target?.openInventory(var1)
                         else -> throw IllegalArgumentException("参数必须是 Inventory 或 InventoryView 类型")
                     }
                 }
-                .function("openWorkbench", 2) {
+                .syncFunction("openWorkbench", 2) {
                     it.target?.openWorkbench(
                         it.getArgument(0) as Location,
                         it.getBoolean(1)
                     )
                 }
-                .function("openEnchanting", 2) {
+                .syncFunction("openEnchanting", 2) {
                     it.target?.openEnchanting(
                         it.getArgument(0) as Location,
                         it.getBoolean(1)
                     )
                 }
-                .function("openMerchant", 2) {
+                .syncFunction("openMerchant", 2) {
                     when (val var1 = it.getArgument(0)) {
                         is Villager -> it.target?.openMerchant(var1, it.getBoolean(1))
                         is Merchant -> it.target?.openMerchant(var1, it.getBoolean(1))

@@ -16,21 +16,21 @@ object FnRegionAccessor {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(RegionAccessor::class.java)
-                .function("biome", 1) { it.target?.getBiome(it.getArgument(0) as Location) }
-                .function("biome", 3) {
+                .syncFunction("biome", 1) { it.target?.getBiome(it.getArgument(0) as Location) }
+                .syncFunction("biome", 3) {
                     it.target?.getBiome(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getNumber(2).toInt()
                     )
                 }
-                .function("setBiome", 2) {
+                .syncFunction("setBiome", 2) {
                     it.target?.setBiome(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Biome
                     )
                 }
-                .function("setBiome", 4) {
+                .syncFunction("setBiome", 4) {
                     it.target?.setBiome(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
@@ -38,37 +38,37 @@ object FnRegionAccessor {
                         it.getArgument(3) as Biome
                     )
                 }
-                .function("blockState", 1) { it.target?.getBlockState(it.getArgument(0) as Location) }
-                .function("blockState", 3) {
+                .syncFunction("blockState", 1) { it.target?.getBlockState(it.getArgument(0) as Location) }
+                .syncFunction("blockState", 3) {
                     it.target?.getBlockState(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getNumber(2).toInt()
                     )
                 }
-                .function("blockData", 1) { it.target?.getBlockData(it.getArgument(0) as Location) }
-                .function("blockData", 3) {
+                .syncFunction("blockData", 1) { it.target?.getBlockData(it.getArgument(0) as Location) }
+                .syncFunction("blockData", 3) {
                     it.target?.getBlockData(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getNumber(2).toInt()
                     )
                 }
-                .function("type", 1) { it.target?.getType(it.getArgument(0) as Location) }
-                .function("type", 3) {
+                .syncFunction("type", 1) { it.target?.getType(it.getArgument(0) as Location) }
+                .syncFunction("type", 3) {
                     it.target?.getType(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getNumber(2).toInt()
                     )
                 }
-                .function("setBlockData", 2) {
+                .syncFunction("setBlockData", 2) {
                     it.target?.setBlockData(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as BlockData
                     )
                 }
-                .function("setBlockData", 4) {
+                .syncFunction("setBlockData", 4) {
                     it.target?.setBlockData(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
@@ -76,13 +76,13 @@ object FnRegionAccessor {
                         it.getArgument(3) as BlockData
                     )
                 }
-                .function("setType", 2) {
+                .syncFunction("setType", 2) {
                     it.target?.setType(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Material
                     )
                 }
-                .function("setType", 4) {
+                .syncFunction("setType", 4) {
                     it.target?.setType(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
@@ -90,38 +90,38 @@ object FnRegionAccessor {
                         it.getArgument(3) as Material
                     )
                 }
-                .function("generateTree", 3) {
+                .syncFunction("generateTree", 3) {
                     it.target?.generateTree(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as java.util.Random,
                         it.getArgument(2) as org.bukkit.TreeType
                     )
                 }
-                .function("spawnEntity", 2) {
+                .syncFunction("spawnEntity", 2) {
                     it.target?.spawnEntity(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as EntityType
                     )
                 }
-                .function("spawnEntity", 3) {
+                .syncFunction("spawnEntity", 3) {
                     it.target?.spawnEntity(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as EntityType,
                         it.getBoolean(2)
                     )
                 }
-                .function("entities", 0) { it.target?.entities }
-                .function("livingEntities", 0) { it.target?.livingEntities }
-                .function("entitiesByClasses", 0) { it.target?.getEntitiesByClasses() }
-                .function("highestBlockYAt", 2) {
+                .syncFunction("entities", 0) { it.target?.entities }
+                .syncFunction("livingEntities", 0) { it.target?.livingEntities }
+                .syncFunction("entitiesByClasses", 0) { it.target?.getEntitiesByClasses() }
+                .syncFunction("highestBlockYAt", 2) {
                     when (val var1 = it.getArgument(0)) {
                         is Int -> it.target?.getHighestBlockYAt(var1, it.getNumber(1).toInt())
                         is Location -> it.target?.getHighestBlockYAt(var1, it.getArgument(1) as HeightMap)
                         else -> throw IllegalArgumentException("参数1必须是 Int 或 Location 类型")
                     }
                 }
-                .function("highestBlockYAt", 1) { it.target?.getHighestBlockYAt(it.getArgument(0) as Location) }
-                .function("highestBlockYAt", 3) {
+                .syncFunction("highestBlockYAt", 1) { it.target?.getHighestBlockYAt(it.getArgument(0) as Location) }
+                .syncFunction("highestBlockYAt", 3) {
                     it.target?.getHighestBlockYAt(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),

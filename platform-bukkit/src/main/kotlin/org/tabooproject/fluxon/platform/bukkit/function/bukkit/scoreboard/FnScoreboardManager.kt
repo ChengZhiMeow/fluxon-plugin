@@ -11,7 +11,7 @@ object FnScoreboardManager {
         with(FluxonRuntime.getInstance()) {
             registerExtension(ScoreboardManager::class.java)
                 .function("mainScoreboard", 0) { it.target?.mainScoreboard }
-                .function("newScoreboard", 0) { it.target?.newScoreboard }
+                .syncFunction("newScoreboard", 0) { it.target?.newScoreboard }
         }
     }
 }

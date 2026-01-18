@@ -49,7 +49,7 @@ object FnPlayer {
                 .function("address", 0) { it.target?.address }
                 .function("isTransferred", 0) { it.target?.isTransferred }
                 .function("sendRawMessage", 1) { it.target?.sendRawMessage(it.getString(0)!!) }
-                .function("kickPlayer", 1) { it.target?.kickPlayer(it.getString(0)) }
+                .syncFunction("kickPlayer", 1) { it.target?.kickPlayer(it.getString(0)) }
                 .function("ban", 4) {
                     when (val var2 = it.getArgument(1)) {
                         is Date -> it.target?.ban(it.getString(0), var2, it.getString(2), it.getBoolean(3))
@@ -66,8 +66,8 @@ object FnPlayer {
                         else -> throw IllegalArgumentException("参数2必须是 Date, Instant, 或 Duration 类型")
                     }
                 }
-                .function("chat", 1) { it.target?.chat(it.getString(0)!!) }
-                .function("performCommand", 1) { it.target?.performCommand(it.getString(0)!!) }
+                .syncFunction("chat", 1) { it.target?.chat(it.getString(0)!!) }
+                .syncFunction("performCommand", 1) { it.target?.performCommand(it.getString(0)!!) }
                 .function("isOnGround", 0) { it.target?.isOnGround }
                 .function("isSneaking", 0) { it.target?.isSneaking }
                 .function("setSneaking", 1) { it.target?.setSneaking(it.getBoolean(0)) }

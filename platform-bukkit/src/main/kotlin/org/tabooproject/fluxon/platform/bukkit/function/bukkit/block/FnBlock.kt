@@ -29,7 +29,7 @@ object FnBlock {
                 // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("worldName", 0) { it.target?.world?.name }
                 .function("data", 0) { it.target?.data }
-                .function("blockData", 0) { it.target?.blockData }
+                .syncFunction("blockData", 0) { it.target?.blockData }
                 .function("relative", 3) {
                     it.target?.getRelative(
                         it.getNumber(0).toInt(),

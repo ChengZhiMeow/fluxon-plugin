@@ -69,14 +69,14 @@ object FnLivingEntity {
                 .function("noActionTicks", 0) { it.target?.noActionTicks }
                 .function("setNoActionTicks", 1) { it.target?.setNoActionTicks(it.getNumber(0).toInt()) }
                 .function("killer", 0) { it.target?.killer }
-                .function("addPotionEffect", 1) { it.target?.addPotionEffect(it.getArgument(0) as PotionEffect) }
-                .function("addPotionEffect", 2) {
+                .syncFunction("addPotionEffect", 1) { it.target?.addPotionEffect(it.getArgument(0) as PotionEffect) }
+                .syncFunction("addPotionEffect", 2) {
                     it.target?.addPotionEffect(
                         it.getArgument(0) as PotionEffect,
                         it.getBoolean(1)
                     )
                 }
-                .function(
+                .syncFunction(
                     "addPotionEffects",
                     1
                 ) { it.target?.addPotionEffects(it.getArgument(0) as Collection<PotionEffect>) }

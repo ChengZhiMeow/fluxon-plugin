@@ -32,14 +32,14 @@ object FnEntity {
                         it.getNumber(1).toFloat()
                     )
                 }
-                .function("teleport", 1) {
+                .syncFunction("teleport", 1) {
                     when (val var1 = it.getArgument(0)) {
                         is Location -> it.target?.teleport(var1)
                         is Entity -> it.target?.teleport(var1)
                         else -> throw IllegalArgumentException("参数必须是 Location 或 Entity 类型")
                     }
                 }
-                .function("teleport", 2) {
+                .syncFunction("teleport", 2) {
                     when (val var1 = it.getArgument(0)) {
                         is Location -> it.target?.teleport(
                             var1,
@@ -54,7 +54,7 @@ object FnEntity {
                         else -> throw IllegalArgumentException("参数必须是 Location 或 Entity 类型")
                     }
                 }
-                .function("nearbyEntities", 3) {
+                .syncFunction("nearbyEntities", 3) {
                     it.target?.getNearbyEntities(
                         it.getNumber(0).toDouble(),
                         it.getNumber(1).toDouble(),

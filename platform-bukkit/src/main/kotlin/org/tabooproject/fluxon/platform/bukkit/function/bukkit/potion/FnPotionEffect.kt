@@ -11,7 +11,7 @@ object FnPotionEffect {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(PotionEffect::class.java)
-                .function("apply", 1) { it.target?.apply(it.getArgument(0) as LivingEntity) }
+                .syncFunction("apply", 1) { it.target?.apply(it.getArgument(0) as LivingEntity) }
                 .function("equals", 1) { it.target?.equals(it.getArgument(0)) }
                 .function("amplifier", 0) { it.target?.amplifier }
                 .function("duration", 0) { it.target?.duration }

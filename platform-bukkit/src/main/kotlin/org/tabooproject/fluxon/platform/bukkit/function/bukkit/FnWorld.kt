@@ -42,30 +42,30 @@ object FnWorld {
                     )
                 }
                 .function("blockAt", 1) { it.target?.getBlockAt(it.getArgument(0) as Location) }
-                .function("highestBlockAt", 2) {
+                .syncFunction("highestBlockAt", 2) {
                     when (val var1 = it.getArgument(0)) {
                         is Int -> it.target?.getHighestBlockAt(var1, it.getNumber(1).toInt())
                         is Location -> it.target?.getHighestBlockAt(var1, it.getArgument(1) as HeightMap)
                         else -> throw IllegalArgumentException("参数必须是 Int 或 Location 类型")
                     }
                 }
-                .function("highestBlockAt", 1) { it.target?.getHighestBlockAt(it.getArgument(0) as Location) }
-                .function("highestBlockAt", 3) {
+                .syncFunction("highestBlockAt", 1) { it.target?.getHighestBlockAt(it.getArgument(0) as Location) }
+                .syncFunction("highestBlockAt", 3) {
                     it.target?.getHighestBlockAt(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getArgument(2) as HeightMap
                     )
                 }
-                .function("chunkAt", 2) { it.target?.getChunkAt(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
-                .function("chunkAt", 3) {
+                .syncFunction("chunkAt", 2) { it.target?.getChunkAt(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
+                .syncFunction("chunkAt", 3) {
                     it.target?.getChunkAt(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getBoolean(2)
                     )
                 }
-                .function("chunkAt", 1) {
+                .syncFunction("chunkAt", 1) {
                     when (val var1 = it.getArgument(0)) {
                         is Location -> it.target?.getChunkAt(var1)
                         is Block -> it.target?.getChunkAt(var1)
@@ -74,7 +74,7 @@ object FnWorld {
                 }
                 .function("isChunkLoaded", 1) { it.target?.isChunkLoaded(it.getArgument(0) as Chunk) }
                 .function("loadedChunks", 0) { it.target?.loadedChunks }
-                .function("loadChunk", 1) { it.target?.loadChunk(it.getArgument(0) as Chunk) }
+                .syncFunction("loadChunk", 1) { it.target?.loadChunk(it.getArgument(0) as Chunk) }
                 .function("isChunkLoaded", 2) {
                     it.target?.isChunkLoaded(
                         it.getNumber(0).toInt(),
@@ -93,24 +93,29 @@ object FnWorld {
                         it.getNumber(1).toInt()
                     )
                 }
-                .function("loadChunk", 2) { it.target?.loadChunk(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
-                .function("loadChunk", 3) {
+                .syncFunction("loadChunk", 2) { it.target?.loadChunk(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
+                .syncFunction("loadChunk", 3) {
                     it.target?.loadChunk(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getBoolean(2)
                     )
                 }
-                .function("unloadChunk", 1) { it.target?.unloadChunk(it.getArgument(0) as Chunk) }
-                .function("unloadChunk", 2) { it.target?.unloadChunk(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
-                .function("unloadChunk", 3) {
+                .syncFunction("unloadChunk", 1) { it.target?.unloadChunk(it.getArgument(0) as Chunk) }
+                .syncFunction("unloadChunk", 2) {
+                    it.target?.unloadChunk(
+                        it.getNumber(0).toInt(),
+                        it.getNumber(1).toInt()
+                    )
+                }
+                .syncFunction("unloadChunk", 3) {
                     it.target?.unloadChunk(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
                         it.getBoolean(2)
                     )
                 }
-                .function("unloadChunkRequest", 2) {
+                .syncFunction("unloadChunkRequest", 2) {
                     it.target?.unloadChunkRequest(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt()
@@ -177,13 +182,13 @@ object FnWorld {
                     "intersectingChunks",
                     1
                 ) { it.target?.getIntersectingChunks(it.getArgument(0) as BoundingBox) }
-                .function("dropItem", 2) {
+                .syncFunction("dropItem", 2) {
                     it.target?.dropItem(it.getArgument(0) as Location, it.getArgument(1) as ItemStack)
                 }
-                .function("dropItemNaturally", 2) {
+                .syncFunction("dropItemNaturally", 2) {
                     it.target?.dropItemNaturally(it.getArgument(0) as Location, it.getArgument(1) as ItemStack)
                 }
-                .function("spawnArrow", 4) {
+                .syncFunction("spawnArrow", 4) {
                     it.target?.spawnArrow(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Vector,
@@ -191,29 +196,29 @@ object FnWorld {
                         it.getNumber(3).toFloat()
                     )
                 }
-                .function("generateTree", 2) {
+                .syncFunction("generateTree", 2) {
                     it.target?.generateTree(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as TreeType
                     )
                 }
-                .function("generateTree", 3) {
+                .syncFunction("generateTree", 3) {
                     it.target?.generateTree(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as TreeType,
                         it.getArgument(2) as BlockChangeDelegate
                     )
                 }
-                .function("strikeLightning", 1) { it.target?.strikeLightning(it.getArgument(0) as Location) }
-                .function(
+                .syncFunction("strikeLightning", 1) { it.target?.strikeLightning(it.getArgument(0) as Location) }
+                .syncFunction(
                     "strikeLightningEffect",
                     1
                 ) { it.target?.strikeLightningEffect(it.getArgument(0) as Location) }
-                .function("entities", 0) { it.target?.entities }
-                .function("livingEntities", 0) { it.target?.livingEntities }
-                .function("entitiesByClasses", 0) { it.target?.getEntitiesByClasses() }
-                .function("players", 0) { it.target?.players }
-                .function("nearbyEntities", 4) {
+                .syncFunction("entities", 0) { it.target?.entities }
+                .syncFunction("livingEntities", 0) { it.target?.livingEntities }
+                .syncFunction("entitiesByClasses", 0) { it.target?.getEntitiesByClasses() }
+                .syncFunction("players", 0) { it.target?.players }
+                .syncFunction("nearbyEntities", 4) {
                     it.target?.getNearbyEntities(
                         it.getArgument(0) as Location,
                         it.getNumber(1).toDouble(),
@@ -221,17 +226,17 @@ object FnWorld {
                         it.getNumber(3).toDouble()
                     )
                 }
-                .function("nearbyEntities", 1) {
+                .syncFunction("nearbyEntities", 1) {
                     it.target?.getNearbyEntities(it.getArgument(0) as BoundingBox)
                 }
-                .function("rayTraceEntities", 3) {
+                .syncFunction("rayTraceEntities", 3) {
                     it.target?.rayTraceEntities(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Vector,
                         it.getNumber(2).toDouble()
                     )
                 }
-                .function("rayTraceEntities", 4) {
+                .syncFunction("rayTraceEntities", 4) {
                     it.target?.rayTraceEntities(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Vector,
@@ -307,7 +312,7 @@ object FnWorld {
                 .function("isClearWeather", 0) { it.target?.isClearWeather }
                 .function("setClearWeatherDuration", 1) { it.target?.setClearWeatherDuration(it.getNumber(0).toInt()) }
                 .function("clearWeatherDuration", 0) { it.target?.clearWeatherDuration }
-                .function("createExplosion", 4) {
+                .syncFunction("createExplosion", 4) {
                     when (val var1 = it.getArgument(0)) {
                         is Double -> it.target?.createExplosion(
                             var1,
@@ -326,7 +331,7 @@ object FnWorld {
                         else -> throw IllegalArgumentException("参数必须是 Double 或 Location 类型")
                     }
                 }
-                .function("createExplosion", 5) {
+                .syncFunction("createExplosion", 5) {
                     when (val var1 = it.getArgument(0)) {
                         is Double -> it.target?.createExplosion(
                             var1,
@@ -347,7 +352,7 @@ object FnWorld {
                         else -> throw IllegalArgumentException("参数必须是 Double 或 Location 类型")
                     }
                 }
-                .function("createExplosion", 6) {
+                .syncFunction("createExplosion", 6) {
                     it.target?.createExplosion(
                         it.getNumber(0).toDouble(),
                         it.getNumber(1).toDouble(),
@@ -357,7 +362,7 @@ object FnWorld {
                         it.getBoolean(5)
                     )
                 }
-                .function("createExplosion", 7) {
+                .syncFunction("createExplosion", 7) {
                     it.target?.createExplosion(
                         it.getNumber(0).toDouble(),
                         it.getNumber(1).toDouble(),
@@ -368,13 +373,13 @@ object FnWorld {
                         it.getArgument(6) as Entity
                     )
                 }
-                .function("createExplosion", 2) {
+                .syncFunction("createExplosion", 2) {
                     it.target?.createExplosion(
                         it.getArgument(0) as Location,
                         it.getNumber(1).toFloat()
                     )
                 }
-                .function("createExplosion", 3) {
+                .syncFunction("createExplosion", 3) {
                     it.target?.createExplosion(
                         it.getArgument(0) as Location,
                         it.getNumber(1).toFloat(),
@@ -385,16 +390,16 @@ object FnWorld {
                 .function("setPVP", 1) { it.target?.setPVP(it.getBoolean(0)) }
                 .function("generator", 0) { it.target?.generator }
                 .function("biomeProvider", 0) { it.target?.biomeProvider }
-                .function("save", 0) { it.target?.save() }
+                .syncFunction("save", 0) { it.target?.save() }
                 .function("populators", 0) { it.target?.populators }
-                .function("spawnFallingBlock", 2) {
+                .syncFunction("spawnFallingBlock", 2) {
                     when (val var2 = it.getArgument(1)) {
                         is MaterialData -> it.target?.spawnFallingBlock(it.getArgument(0) as Location, var2)
                         is BlockData -> it.target?.spawnFallingBlock(it.getArgument(0) as Location, var2)
                         else -> throw IllegalArgumentException("参数必须是 MaterialData 或 BlockData 类型")
                     }
                 }
-                .function("spawnFallingBlock", 3) {
+                .syncFunction("spawnFallingBlock", 3) {
                     it.target?.spawnFallingBlock(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Material,
@@ -427,8 +432,8 @@ object FnWorld {
                 .function("setSpawnFlags", 2) { it.target?.setSpawnFlags(it.getBoolean(0), it.getBoolean(1)) }
                 .function("allowAnimals", 0) { it.target?.allowAnimals }
                 .function("allowMonsters", 0) { it.target?.allowMonsters }
-                .function("biome", 2) { it.target?.getBiome(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
-                .function("setBiome", 3) {
+                .syncFunction("biome", 2) { it.target?.getBiome(it.getNumber(0).toInt(), it.getNumber(1).toInt()) }
+                .syncFunction("setBiome", 3) {
                     it.target?.setBiome(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),
@@ -549,14 +554,14 @@ object FnWorld {
                         it.getNumber(1).toInt()
                     )
                 }
-                .function("playNote", 3) {
+                .syncFunction("playNote", 3) {
                     it.target?.playNote(
                         it.getArgument(0) as Location,
                         it.getArgument(1) as Instrument,
                         it.getArgument(2) as Note
                     )
                 }
-                .function("playSound", 4) {
+                .syncFunction("playSound", 4) {
                     when (val var1 = it.getArgument(0)) {
                         is Location -> when (val var2 = it.getArgument(1)) {
                             is Sound -> it.target?.playSound(
@@ -597,7 +602,7 @@ object FnWorld {
                         else -> throw IllegalArgumentException("第一个参数必须是 Location 或 Entity 类型")
                     }
                 }
-                .function("playSound", 5) {
+                .syncFunction("playSound", 5) {
                     when (val var1 = it.getArgument(0)) {
                         is Location -> when (val var2 = it.getArgument(1)) {
                             is Sound -> it.target?.playSound(
@@ -642,7 +647,7 @@ object FnWorld {
                         else -> throw IllegalArgumentException("第一个参数必须是 Location 或 Entity 类型")
                     }
                 }
-                .function("playSound", 6) {
+                .syncFunction("playSound", 6) {
                     when (val var1 = it.getArgument(0)) {
                         is Location -> when (val var2 = it.getArgument(1)) {
                             is Sound -> it.target?.playSound(
@@ -758,7 +763,7 @@ object FnWorld {
                         it.getNumber(8).toDouble()
                     )
                 }
-                .function("locateNearestStructure", 4) {
+                .syncFunction("locateNearestStructure", 4) {
                     when (val var2 = it.getArgument(1)) {
                         is StructureType -> it.target?.locateNearestStructure(
                             it.getArgument(0) as Location,
@@ -777,13 +782,13 @@ object FnWorld {
                         else -> throw IllegalArgumentException("第二个参数必须是 StructureType 或 Structure 类型")
                     }
                 }
-                .function("locateNearestBiome", 2) {
+                .syncFunction("locateNearestBiome", 2) {
                     it.target?.locateNearestBiome(
                         it.getArgument(0) as Location,
                         it.getNumber(1).toInt()
                     )
                 }
-                .function("locateNearestBiome", 4) {
+                .syncFunction("locateNearestBiome", 4) {
                     it.target?.locateNearestBiome(
                         it.getArgument(0) as Location,
                         it.getNumber(1).toInt(),
@@ -791,7 +796,7 @@ object FnWorld {
                         it.getNumber(3).toInt()
                     )
                 }
-                .function("locateNearestRaid", 2) {
+                .syncFunction("locateNearestRaid", 2) {
                     it.target?.locateNearestRaid(
                         it.getArgument(0) as Location,
                         it.getNumber(1).toInt()
@@ -800,13 +805,13 @@ object FnWorld {
                 .function("raids", 0) { it.target?.raids }
                 .function("enderDragonBattle", 0) { it.target?.enderDragonBattle }
                 .function("featureFlags", 0) { it.target?.featureFlags }
-                .function("structures", 2) {
+                .syncFunction("structures", 2) {
                     it.target?.getStructures(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt()
                     )
                 }
-                .function("structures", 3) {
+                .syncFunction("structures", 3) {
                     it.target?.getStructures(
                         it.getNumber(0).toInt(),
                         it.getNumber(1).toInt(),

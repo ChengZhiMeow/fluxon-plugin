@@ -119,7 +119,7 @@ object FnServer {
                 .function("logger", 0) { it.target?.logger }
                 .function("pluginCommand", 1) { it.target?.getPluginCommand(it.getString(0)!!) }
                 .function("savePlayers", 0) { it.target?.savePlayers() }
-                .function("dispatchCommand", 2) {
+                .syncFunction("dispatchCommand", 2) {
                     it.target?.dispatchCommand(
                         it.getArgument(0) as CommandSender,
                         it.getString(1)!!

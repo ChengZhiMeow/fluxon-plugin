@@ -11,6 +11,23 @@ object FnFishHook {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(FishHook::class.java)
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("isUnhooked", 0) { it.target?.state == FishHook.HookState.UNHOOKED }
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("isHookedEntity", 0) { it.target?.state == FishHook.HookState.HOOKED_ENTITY }
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("isBobbing", 0) { it.target?.state == FishHook.HookState.BOBBING }
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("setLureTime", 1) {
+                    val time = it.getNumber(0).toInt()
+                    it.target?.setLureTime(time, time)
+                }
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("setLureAngle", 1) {
+                    val time = it.getNumber(0).toFloat()
+                    it.target?.setLureAngle(time, time)
+                }
+
                 .function("minWaitTime", 0) { it.target?.minWaitTime }
                 .function("setMinWaitTime", 1) { it.target?.setMinWaitTime(it.getNumber(0).toInt()) }
                 .function("maxWaitTime", 0) { it.target?.maxWaitTime }
@@ -44,6 +61,8 @@ object FnFishHook {
                 .function("isRainInfluenced", 0) { it.target?.isRainInfluenced }
                 .function("setRainInfluenced", 1) { it.target?.setRainInfluenced(it.getBoolean(0)) }
                 .function("state", 0) { it.target?.state }
+//                .function("waitTime", 0) { it.target?.waitTime }
+//                .function("setWaitTime", 1) { it.target?.apply { waitTime = it.getNumber(0).toInt() } }
         }
     }
 }

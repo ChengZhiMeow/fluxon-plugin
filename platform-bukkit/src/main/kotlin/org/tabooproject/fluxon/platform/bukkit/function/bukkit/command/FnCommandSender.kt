@@ -1,10 +1,10 @@
 package org.tabooproject.fluxon.platform.bukkit.function.bukkit.command
 
-import ink.ptms.adyeshach.taboolib.common.platform.function.adaptCommandSender
 import org.bukkit.command.CommandSender
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.adaptCommandSender
 import java.util.*
 
 object FnCommandSender {

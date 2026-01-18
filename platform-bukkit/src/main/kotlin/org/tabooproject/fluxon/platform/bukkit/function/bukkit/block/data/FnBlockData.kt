@@ -17,6 +17,7 @@ object FnBlockData {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(BlockData::class.java)
+//                .function("isRandomlyTicked", 0) { it.target?.isRandomlyTicked }
                 .function("material", 0) { it.target?.material }
                 .function("asString", 0) { it.target?.asString }
                 .function("asString", 1) { it.target?.getAsString(it.getBoolean(0)) }

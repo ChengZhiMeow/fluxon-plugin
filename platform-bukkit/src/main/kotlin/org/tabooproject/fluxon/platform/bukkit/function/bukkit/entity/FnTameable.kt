@@ -11,6 +11,7 @@ object FnTameable {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(Tameable::class.java)
+//                .function("ownerUniqueId", 0) { it.target?.ownerUniqueId?.toString() }
                 .function("isTamed", 0) { it.target?.isTamed }
                 .function("setTamed", 1) { it.target?.setTamed(it.getBoolean(0)) }
                 .function("owner", 0) { it.target?.owner }

@@ -10,6 +10,12 @@ object FnExperienceOrb {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(ExperienceOrb::class.java)
+//                .function("isFromBottle", 0) { it.target?.isFromBottle }
+//                .function("triggerEntityId", 0) { it.target?.triggerEntityId?.toString() }
+//                .function("sourceEntityId", 0) { it.target?.sourceEntityId?.toString() }
+//                .function("spawnReason", 0) { it.target?.spawnReason?.name }
+//                .function("count", 0) { it.target?.count }
+//                .function("setCount", 1) { it.target?.apply { count = it.getNumber(0).toInt() } }
                 .function("experience", 0) { it.target?.experience }
                 .function("setExperience", 1) { it.target?.setExperience(it.getNumber(0).toInt()) }
         }

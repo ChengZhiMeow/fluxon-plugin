@@ -20,6 +20,7 @@ import org.bukkit.scoreboard.Scoreboard
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.platform.util.onlinePlayers
 import java.time.Duration
 import java.time.Instant
 import java.util.*
@@ -28,6 +29,17 @@ object FnPlayer {
     @Awake(LifeCycle.INIT)
     private fun init() {
         with(FluxonRuntime.getInstance()) {
+            // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+            registerFunction("player", 1) {
+                when (val id = it.getArgument(0)) {
+                    is UUID -> Bukkit.getPlayer(id)
+                    is String -> Bukkit.getPlayerExact(id)
+                    else -> null
+                }
+            }
+            // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+            registerFunction("players", 0) { onlinePlayers }
+
             registerExtension(Player::class.java)
                 .function("name", 0) { it.target?.name }
                 .function("displayName", 0) { it.target?.displayName }
@@ -77,6 +89,8 @@ object FnPlayer {
                 .function("loadData", 0) { it.target?.loadData() }
                 .function("setSleepingIgnored", 1) { it.target?.setSleepingIgnored(it.getBoolean(0)) }
                 .function("isSleepingIgnored", 0) { it.target?.isSleepingIgnored }
+                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
+                .function("bedLocation", 0) { it.target?.bedSpawnLocation }
                 .function("bedSpawnLocation", 0) { it.target?.bedSpawnLocation }
                 .function("respawnLocation", 0) { it.target?.respawnLocation }
                 .function("setBedSpawnLocation", 1) { it.target?.setBedSpawnLocation(it.getArgument(0) as Location) }
@@ -376,6 +390,8 @@ object FnPlayer {
                 ) { it.target?.setCustomChatCompletions(it.getArgument(0) as Collection<String>) }
                 .function("previousGameMode", 0) { it.target?.previousGameMode }
                 .function("setPlayerTime", 2) { it.target?.setPlayerTime(it.getNumber(0).toLong(), it.getBoolean(1)) }
+                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
+                .function("setPlayerTime", 1) { it.target?.setPlayerTime(it.getNumber(0).toLong(), false) }
                 .function("playerTime", 0) { it.target?.playerTime }
                 .function("playerTimeOffset", 0) { it.target?.playerTimeOffset }
                 .function("isPlayerTimeRelative", 0) { it.target?.isPlayerTimeRelative }
@@ -387,6 +403,10 @@ object FnPlayer {
                 .function("setExpCooldown", 1) { it.target?.setExpCooldown(it.getNumber(0).toInt()) }
                 .function("giveExp", 1) { it.target?.giveExp(it.getNumber(0).toInt()) }
                 .function("giveExpLevels", 1) { it.target?.giveExpLevels(it.getNumber(0).toInt()) }
+                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
+                .function("experience", 0) { it.target?.exp }
+                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
+                .function("setExperience", 1) { it.target?.setExp(it.getNumber(0).toFloat()) }
                 .function("exp", 0) { it.target?.exp }
                 .function("setExp", 1) { it.target?.setExp(it.getNumber(0).toFloat()) }
                 .function("level", 0) { it.target?.level }
@@ -589,6 +609,8 @@ object FnPlayer {
                     "advancementProgress",
                     1
                 ) { it.target?.getAdvancementProgress(it.getArgument(0) as Advancement) }
+                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
+                .function("viewDistance", 0) { it.target?.clientViewDistance }
                 .function("clientViewDistance", 0) { it.target?.clientViewDistance }
                 .function("ping", 0) { it.target?.ping }
                 .function("locale", 0) { it.target?.locale }
@@ -598,6 +620,11 @@ object FnPlayer {
                 .function("openSign", 2) { it.target?.openSign(it.getArgument(0) as Sign, it.getArgument(1) as Side) }
                 .function("showDemoScreen", 0) { it.target?.showDemoScreen() }
                 .function("isAllowingServerListings", 0) { it.target?.isAllowingServerListings }
+//                .function("displayName", 0) { it.target?.displayName() }
+//                .function("locale", 0) { it.target?.locale() }
+//                .function("playerListFooter", 0) { it.target?.playerListFooter() }
+//                .function("playerListHeader", 0) { it.target?.playerListHeader() }
+//                .function("playerListName", 0) { it.target?.playerListName() }
         }
     }
 }

@@ -172,6 +172,7 @@ object FnWorld {
                     "removePluginChunkTickets",
                     1
                 ) { it.target?.removePluginChunkTickets(it.getArgument(0) as Plugin) }
+                .function("pluginChunkTickets", 0) { it.target?.pluginChunkTickets }
                 .function("pluginChunkTickets", 2) {
                     it.target?.getPluginChunkTickets(
                         it.getNumber(0).toInt(),

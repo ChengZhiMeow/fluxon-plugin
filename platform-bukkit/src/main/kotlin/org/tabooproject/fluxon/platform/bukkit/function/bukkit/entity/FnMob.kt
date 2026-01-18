@@ -16,6 +16,13 @@ object FnMob {
                 .function("setAware", 1) { it.target?.setAware(it.getBoolean(0)) }
                 .function("isAware", 0) { it.target?.isAware }
                 .function("ambientSound", 0) { it.target?.ambientSound }
+//                .function("possibleExperienceReward", 0) { it.target?.possibleExperienceReward }
+//                .function("headRotationSpeed", 0) { it.target?.headRotationSpeed }
+//                .function("maxHeadPitch", 0) { it.target?.maxHeadPitch }
+//                .function("isAggressive", 0) { it.target?.isAggressive }
+//                .function("setAggressive", 1) { it.target?.isAggressive = it.getBoolean(0) }
+//                .function("isLeftHanded", 0) { it.target?.isLeftHanded }
+//                .function("setLeftHanded", 1) { it.target?.isLeftHanded = it.getBoolean(0) }
         }
     }
 }

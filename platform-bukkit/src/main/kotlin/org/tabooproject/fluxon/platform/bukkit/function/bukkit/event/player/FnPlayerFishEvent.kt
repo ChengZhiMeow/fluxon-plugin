@@ -21,6 +21,21 @@ object FnPlayerFishEvent {
                 .function("handlers", 0) { it.target?.handlers }
                 // static
                 .function("handlerList", 0) { PlayerFishEvent.getHandlerList() }
+
+                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
+                .function("isFishing", 0) { it.target?.let { e -> e.state == PlayerFishEvent.State.FISHING } }
+                .function("isCaughtFish", 0) { it.target?.let { e -> e.state == PlayerFishEvent.State.CAUGHT_FISH } }
+                .function(
+                    "isCaughtEntity",
+                    0
+                ) { it.target?.let { e -> e.state == PlayerFishEvent.State.CAUGHT_ENTITY } }
+                .function("isInGround", 0) { it.target?.let { e -> e.state == PlayerFishEvent.State.IN_GROUND } }
+                .function(
+                    "isFailedAttempt",
+                    0
+                ) { it.target?.let { e -> e.state == PlayerFishEvent.State.FAILED_ATTEMPT } }
+                .function("isReelIn", 0) { it.target?.let { e -> e.state == PlayerFishEvent.State.REEL_IN } }
+                .function("isBite", 0) { it.target?.let { e -> e.state == PlayerFishEvent.State.BITE } }
         }
     }
 }

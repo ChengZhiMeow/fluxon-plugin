@@ -94,6 +94,8 @@ object FnEntity {
                     it.target?.setLastDamageCause(it.getArgument(0) as EntityDamageEvent)
                 }
                 .function("lastDamageCause", 0) { it.target?.lastDamageCause }
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("uuid", 0) { it.target?.uniqueId }
                 .function("uniqueId", 0) { it.target?.uniqueId }
                 .function("ticksLived", 0) { it.target?.ticksLived }
                 .function("setTicksLived", 1) { it.target?.setTicksLived(it.getNumber(0).toInt()) }
@@ -116,6 +118,8 @@ object FnEntity {
                 .function("isInvulnerable", 0) { it.target?.isInvulnerable }
                 .function("isSilent", 0) { it.target?.isSilent }
                 .function("setSilent", 1) { it.target?.setSilent(it.getBoolean(0)) }
+                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
+                .function("gravity", 0) { it.target?.hasGravity() }
                 .function("hasGravity", 0) { it.target?.hasGravity() }
                 .function("setGravity", 1) { it.target?.setGravity(it.getBoolean(0)) }
                 .function("portalCooldown", 0) { it.target?.portalCooldown }

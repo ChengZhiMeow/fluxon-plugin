@@ -5,7 +5,10 @@ import org.bukkit.World
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 
+@PlatformSide(Platform.BUKKIT)
 object FnMaterial {
     @Awake(LifeCycle.INIT)
     private fun init() {

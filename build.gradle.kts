@@ -3,18 +3,20 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
 import io.izzel.taboolib.gradle.Basic
 import io.izzel.taboolib.gradle.CommandHelper
 import io.izzel.taboolib.gradle.Bukkit
+import io.izzel.taboolib.gradle.BukkitHook
 import io.izzel.taboolib.gradle.BukkitNMS
 import io.izzel.taboolib.gradle.BukkitNMSUtil
 import io.izzel.taboolib.gradle.BukkitUtil
 import io.izzel.taboolib.gradle.Velocity
 import io.izzel.taboolib.gradle.BungeeCord
+import io.izzel.taboolib.gradle.Hytale
 import io.izzel.taboolib.gradle.MinecraftChat
 
 
 plugins {
     java
     `maven-publish`
-    id("io.izzel.taboolib") version "2.0.27"
+    id("io.izzel.taboolib") version "2.0.28"
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
 }
 
@@ -24,11 +26,13 @@ taboolib {
         install(CommandHelper)
         install(MinecraftChat)
         install(Bukkit)
+        install(BukkitHook)
         install(BukkitUtil)
         install(BukkitNMS)
         install(BukkitNMSUtil)
         install(Velocity)
         install(BungeeCord)
+        install(Hytale)
         // repoTabooLib = project.repositories.mavenLocal().url.toString()
     }
     description {
@@ -37,16 +41,17 @@ taboolib {
             name("sky")
         }
     }
-    version { taboolib = "6.2.4-8d51195" }
+    version { taboolib = "6.2.4-7c873bc" }
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    taboo("org.tabooproject.fluxon:core:1.4.6") { isTransitive = false }
-    taboo("org.tabooproject.fluxon:inst-core:1.4.6") { isTransitive = false }
+    taboo("org.tabooproject.fluxon:core:1.5.7") { isTransitive = false }
+    taboo("org.tabooproject.fluxon:inst-core:1.5.7") { isTransitive = false }
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
 }
@@ -79,15 +84,16 @@ configure(subprojects) {
             install(Basic)
             install(MinecraftChat)
         }
-        version { taboolib = "6.2.4-8d51195" }
+        version { taboolib = "6.2.4-62eb811" }
     }
     
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     
     dependencies {
-        taboo("org.tabooproject.fluxon:core:1.4.6") { isTransitive = false }
+        taboo("org.tabooproject.fluxon:core:1.5.7") { isTransitive = false }
         compileOnly(kotlin("stdlib"))
         compileOnly(rootProject.fileTree("libs"))
     }
@@ -116,6 +122,7 @@ tasks {
         from(rootProject.findProject(":platform-bukkit")!!.sourceSets["main"].output)
         from(rootProject.findProject(":platform-bungeecord")!!.sourceSets["main"].output)
         from(rootProject.findProject(":platform-velocity")!!.sourceSets["main"].output)
+        from(rootProject.findProject(":platform-hytale")!!.sourceSets["main"].output)
     }
 }
 

@@ -4,8 +4,13 @@ import org.bukkit.event.block.BlockCookEvent
 import org.bukkit.inventory.ItemStack
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
+import taboolib.common.Requires
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
 
+@Requires(classes = ["org.bukkit.event.block.BlockCookEvent"])
+@PlatformSide(Platform.BUKKIT)
 object FnBlockCookEvent {
     @Awake(LifeCycle.INIT)
     private fun init() {

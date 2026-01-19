@@ -5,7 +5,12 @@ import org.bukkit.entity.Mob
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.common.platform.PlatformSide
+import taboolib.common.Requires
 
+@Requires(classes = ["org.bukkit.entity.Mob"])
+@PlatformSide(Platform.BUKKIT)
 object FnMob {
     @Awake(LifeCycle.INIT)
     private fun init() {

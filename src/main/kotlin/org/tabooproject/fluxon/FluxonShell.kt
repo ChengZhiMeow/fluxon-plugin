@@ -1,11 +1,8 @@
 package org.tabooproject.fluxon
 
-import org.tabooproject.fluxon.interpreter.Interpreter
 import org.tabooproject.fluxon.interpreter.ReturnValue
-import org.tabooproject.fluxon.parser.ParseResult
+import org.tabooproject.fluxon.parser.ParsedScript
 import org.tabooproject.fluxon.parser.error.ParseException
-import org.tabooproject.fluxon.profiler.EnvironmentCreationEvent
-import org.tabooproject.fluxon.profiler.InterpreterExecutionEvent
 import org.tabooproject.fluxon.runtime.Environment
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import org.tabooproject.fluxon.runtime.error.FluxonRuntimeError
@@ -16,7 +13,7 @@ import java.util.function.Consumer
 
 object FluxonShell {
 
-    val scriptCache = SimpleCache<String, List<ParseResult>>(
+    val scriptCache = SimpleCache<String, ParsedScript>(
         expireAfterAccessMs = 60 * 60 * 1000, // 1小时
         maxSize = 100
     )
@@ -44,44 +41,8 @@ object FluxonShell {
         } else {
             parse(script, environment)
         }
+        if (parsed == null) return null
         return invoke(parsed, environment)
-    }
-
-    /**
-     * 执行脚本（带性能追踪）
-     * 仅在性能分析时使用
-     *
-     * @param script      脚本文本
-     * @param useCache    是否使用缓存，如果脚本修改频繁建议不使用缓存
-     * @param env         脚本执行环境
-     */
-    fun invokeWithProfiling(script: String, useCache: Boolean = true, env: Consumer<Environment> = Consumer {}): Any? {
-        val event = InterpreterExecutionEvent()
-        event.begin()
-        event.scriptContent = if (script.length > 100) script.take(100) + "..." else script
-        event.useCache = useCache
-        return try {
-            // 构建脚本环境
-            val envEvent = EnvironmentCreationEvent()
-            envEvent.begin()
-            envEvent.context = "FluxonShell.invoke"
-            val environment = FluxonRuntime.getInstance().newEnvironment().also { env.accept(it) }
-            envEvent.commit()
-            // 解析脚本（如果有缓存则跳过解析过程）
-            val parsed = if (useCache) {
-                val cached = scriptCache.get(script) { parse(script, environment) }
-                event.cacheHit = scriptCache.contains(script)
-                cached
-            } else {
-                event.cacheHit = false
-                parse(script, environment)
-            }
-            event.parsedBlockCount = parsed.size
-
-            invoke(parsed, environment)
-        } finally {
-            event.commit()
-        }
     }
 
     /**
@@ -90,10 +51,9 @@ object FluxonShell {
      * @param parsed      已解析的脚本
      * @param environment 脚本执行环境
      */
-    fun invoke(parsed: List<ParseResult>, environment: Environment): Any? {
-        val interpreter = Interpreter(environment)
+    fun invoke(parsed: ParsedScript, environment: Environment): Any? {
         return try {
-            interpreter.execute(parsed)
+            parsed.eval(environment)
         } catch (ex: ReturnValue) {
             ex.value
         } catch (ex: FluxonRuntimeError) {
@@ -102,12 +62,12 @@ object FluxonShell {
         }
     }
 
-    fun parse(script: String, environment: Environment): List<ParseResult> {
+    fun parse(script: String, environment: Environment): ParsedScript? {
         return try {
             Fluxon.parse(script.removePrefix(";"), environment)
         } catch (ex: ParseException) {
             warning("解析脚本 $script 时发生错误:\n${ex.formatDiagnostic()}")
-            emptyList()
+            null
         }
     }
 }

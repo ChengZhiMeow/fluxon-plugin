@@ -4,9 +4,16 @@ import org.tabooproject.fluxon.compiler.FluxonFeatures
 import org.tabooproject.fluxon.inst.function.FunctionJvm
 import org.tabooproject.fluxon.runtime.FluxonRuntime
 import taboolib.common.LifeCycle
+import taboolib.common.env.RuntimeDependencies
+import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Awake
 import taboolib.common.util.runSync
 
+@RuntimeDependencies(
+    RuntimeDependency("org.ow2.asm:asm:9.8", test = "org.objectweb.asm.ClassReader"),
+    RuntimeDependency("org.ow2.asm:asm-util:9.8", test = "org.objectweb.asm.tree.MethodNode"),
+    RuntimeDependency("org.ow2.asm:asm-commons:9.8", test = "org.objectweb.asm.commons.MethodRemapper"),
+)
 object FluxonPlugin {
 
     @Awake(LifeCycle.INIT)

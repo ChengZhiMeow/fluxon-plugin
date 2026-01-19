@@ -50,8 +50,6 @@ object FnMaterial {
                 .function("blastResistance", 0) { it.target?.blastResistance }
                 .function("slipperiness", 0) { it.target?.slipperiness }
                 .function("craftingRemainingItem", 0) { it.target?.craftingRemainingItem }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
-                .function("slot", 0) { it.target?.equipmentSlot?.name }
                 .function("equipmentSlot", 0) { it.target?.equipmentSlot }
                 .function("creativeCategory", 0) { it.target?.creativeCategory }
                 .function("translationKey", 0) { it.target?.translationKey }

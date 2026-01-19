@@ -52,16 +52,11 @@ object FnItemMeta {
                 ) { it.target?.hasConflictingEnchant(it.getArgument(0) as Enchantment) }
                 .function("addItemFlags", 0) { it.target?.addItemFlags() }
                 .function("removeItemFlags", 0) { it.target?.removeItemFlags() }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
-                .function("flags", 0) { it.target?.itemFlags }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("hasFlags", 0) { it.target?.itemFlags?.isNotEmpty() }
                 .function("itemFlags", 0) { it.target?.itemFlags }
                 .function("hasItemFlag", 1) { it.target?.hasItemFlag(it.getArgument(0) as ItemFlag) }
                 .function("isHideTooltip", 0) { it.target?.isHideTooltip }
                 .function("setHideTooltip", 1) { it.target?.setHideTooltip(it.getBoolean(0)) }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
-                .function("unbreakable", 0) { it.target?.isUnbreakable }
                 .function("isUnbreakable", 0) { it.target?.isUnbreakable }
                 .function("setUnbreakable", 1) { it.target?.setUnbreakable(it.getBoolean(0)) }
                 .function("hasEnchantmentGlintOverride", 0) { it.target?.hasEnchantmentGlintOverride() }

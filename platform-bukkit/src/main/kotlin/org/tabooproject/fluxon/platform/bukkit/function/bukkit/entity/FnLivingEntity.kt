@@ -20,7 +20,6 @@ object FnLivingEntity {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(LivingEntity::class.java)
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("hasPotion", 0) { it.target?.activePotionEffects?.isNotEmpty() }
                 .function("eyeHeight", 0) { it.target?.eyeHeight }
                 .function("eyeHeight", 1) { it.target?.getEyeHeight(it.getBoolean(0)) }
@@ -129,84 +128,6 @@ object FnLivingEntity {
                 .function("category", 0) { it.target?.category }
                 .function("setInvisible", 1) { it.target?.setInvisible(it.getBoolean(0)) }
                 .function("isInvisible", 0) { it.target?.isInvisible }
-
-                // 橙汁喵: 以下全都是自定义语法, 这个语法并不在Bukkit中存在
-                // 装备栏
-                .function("armorContents", 0) { it.target?.equipment?.armorContents ?: arrayOf<ItemStack>() }
-                .function("setArmorContents", 1) {
-                    it.target?.equipment?.apply {
-                        @Suppress("UNCHECKED_CAST")
-                        armorContents = it.getArgument(0) as? Array<out ItemStack> ?: arrayOf()
-                    }
-                }
-
-                // 主手
-                .function("mainHand", 0) { it.target?.equipment?.itemInMainHand ?: ItemStack(Material.AIR) }
-                .function("setMainHand", 1) { it.target?.equipment?.setItemInMainHand(it.getArgument(0) as? ItemStack) }
-                .function("itemInMainHandDropChance", 0) { it.target?.equipment?.itemInMainHandDropChance }
-                .function("setItemInMainHandDropChance", 1) {
-                    it.target?.equipment?.apply {
-                        itemInMainHandDropChance = it.getNumber(0).toFloat()
-                    }
-                }
-
-                // 副手
-                .function("offHand", 0) { it.target?.equipment?.itemInOffHand ?: ItemStack(Material.AIR) }
-                .function("setOffHand", 1) { it.target?.equipment?.setItemInOffHand(it.getArgument(0) as? ItemStack) }
-                .function("itemInOffHandDropChance", 0) { it.target?.equipment?.itemInOffHandDropChance }
-                .function("setItemInOffHandDropChance", 1) {
-                    it.target?.equipment?.apply {
-                        itemInOffHandDropChance = it.getNumber(0).toFloat()
-                    }
-                }
-
-                // 头盔
-                .function("helmet", 0) { it.target?.equipment?.helmet ?: ItemStack(Material.AIR) }
-                .function("setHelmet", 1) { it.target?.equipment?.apply { helmet = it.getArgument(0) as? ItemStack } }
-                .function("helmetDropChance", 0) { it.target?.equipment?.helmetDropChance }
-                .function("setHelmetDropChance", 1) {
-                    it.target?.equipment?.apply {
-                        helmetDropChance = it.getNumber(0).toFloat()
-                    }
-                }
-
-                // 胸甲
-                .function("chestplate", 0) { it.target?.equipment?.chestplate ?: ItemStack(Material.AIR) }
-                .function("setChestplate", 1) {
-                    it.target?.equipment?.apply {
-                        chestplate = it.getArgument(0) as? ItemStack
-                    }
-                }
-                .function("chestplateDropChance", 0) { it.target?.equipment?.chestplateDropChance }
-                .function("setChestplateDropChance", 1) {
-                    it.target?.equipment?.apply {
-                        chestplateDropChance = it.getNumber(0).toFloat()
-                    }
-                }
-
-                // 护腿
-                .function("leggings", 0) { it.target?.equipment?.leggings ?: ItemStack(Material.AIR) }
-                .function("setLeggings", 1) {
-                    it.target?.equipment?.apply {
-                        leggings = it.getArgument(0) as? ItemStack
-                    }
-                }
-                .function("leggingsDropChance", 0) { it.target?.equipment?.leggingsDropChance }
-                .function("setLeggingsDropChance", 1) {
-                    it.target?.equipment?.apply {
-                        leggingsDropChance = it.getNumber(0).toFloat()
-                    }
-                }
-
-                // 护靴
-                .function("boots", 0) { it.target?.equipment?.boots ?: ItemStack(Material.AIR) }
-                .function("setBoots", 1) { it.target?.equipment?.apply { boots = it.getArgument(0) as? ItemStack } }
-                .function("bootsDropChance", 0) { it.target?.equipment?.bootsDropChance }
-                .function("setBootsDropChance", 1) {
-                    it.target?.equipment?.apply {
-                        bootsDropChance = it.getNumber(0).toFloat()
-                    }
-                }
         }
     }
 }

@@ -22,7 +22,6 @@ object FnWorld {
     @Awake(LifeCycle.INIT)
     private fun init() {
         with(FluxonRuntime.getInstance()) {
-            // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
             registerFunction("world", 1) {
                 when (val id = it.getArgument(0)) {
                     is UUID -> Bukkit.getWorld(id)
@@ -30,7 +29,6 @@ object FnWorld {
                     else -> null
                 }
             }
-            // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
             registerFunction("worlds", 0) { Bukkit.getWorlds() }
 
             registerExtension(World::class.java)

@@ -15,18 +15,13 @@ object FnFishHook {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(FishHook::class.java)
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("isUnhooked", 0) { it.target?.state == FishHook.HookState.UNHOOKED }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("isHookedEntity", 0) { it.target?.state == FishHook.HookState.HOOKED_ENTITY }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("isBobbing", 0) { it.target?.state == FishHook.HookState.BOBBING }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("setLureTime", 1) {
                     val time = it.getNumber(0).toInt()
                     it.target?.setLureTime(time, time)
                 }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("setLureAngle", 1) {
                     val time = it.getNumber(0).toFloat()
                     it.target?.setLureAngle(time, time)

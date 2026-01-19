@@ -12,7 +12,6 @@ object FnCommandSender {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(CommandSender::class.java)
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .syncFunction("performCommand", 1) { adaptCommandSender(it.target!!).performCommand(it.getString(0)!!) }
                 .function("sendMessage", 1) { it.target?.sendMessage(it.getString(0)) }
                 .function("sendMessage", 2) {

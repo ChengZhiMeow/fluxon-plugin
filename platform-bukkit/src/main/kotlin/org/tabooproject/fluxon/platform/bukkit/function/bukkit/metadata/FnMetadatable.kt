@@ -16,19 +16,15 @@ object FnMetadatable {
     private fun init() {
         with(FluxonRuntime.getInstance()) {
             registerExtension(Metadatable::class.java)
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("setMeta", 2) {
                     it.target?.setMeta(it.getArgument(0)!!.toString(), it.getArgument(1)!!)
                 }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("removeMeta", 1) {
                     it.target?.removeMeta(it.getArgument(0)!!.toString())
                 }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("hasMeta", 1) {
                     it.target?.hasMeta(it.getArgument(0)!!.toString())
                 }
-                // 橙汁喵: 自定义语法, 这个语法并不在Bukkit中存在
                 .function("getMeta", 1) {
                     it.target?.getMetaFirstOrNull(it.getArgument(0)!!.toString())?.value()
                 }
